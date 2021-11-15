@@ -1,6 +1,6 @@
 
 
-
+# board is based on rows / height = rows / width = elements in row
 def create_board(width, height):
     '''
     Creates a new game board based on input parameters.
@@ -12,8 +12,19 @@ def create_board(width, height):
     Returns:
     list: Game board
     '''
-    pass
-
+    board = []
+    temp_list = []
+    for j in range(height):
+        for i in range(width):
+            if j == 0 or j == height - 1:
+                temp_list.append("#")
+            elif i == 0 or i == width - 1:
+                temp_list.append("#")
+            else:
+                temp_list.append(" ")
+        board.append(temp_list)
+        temp_list = []
+    return board
 
 def put_player_on_board(board, player):
     '''
