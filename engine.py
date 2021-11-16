@@ -1,10 +1,7 @@
-
+from main import BOARD_HEIGHT, BOARD_WIDTH
+floor = 0
 
 # board is based on rows / height = rows / width = elements in row
-
-
-from main import BOARD_HEIGHT, BOARD_WIDTH
-
 
 def create_board(width, height):
     '''
@@ -47,20 +44,32 @@ def put_player_on_board(board, player):
         x = player["x"]
         y = player["y"]
 
+    current_floor = read_board(change_floor())
 
-    floor = read_board("maps/first_floor.txt")
-
-    count_x = -2
-    count_y = -2
-    for i in range(5):
-        for j in range(5):
+    count_x = -1
+    count_y = -1
+    for i in range(3):
+        for j in range(3):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
-                board[x + count_x][y + count_y] = floor[x + count_x][y + count_y]
+                board[x + count_x][y + count_y] = current_floor[x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
-        count_y = -2
+        count_y = -1
 
     board[x][y] = player["icon"]
+
+
+def change_floor():
+    if floor == 0:
+        return "maps/first_floor.txt"
+    if floor == 1:
+        return "maps/second_floor.txt"
+    if floor == 2:
+        return "maps/third_floor.txt"
+    if floor == 3:
+        return "maps/fourth_floor.txt"
+    if floor == 4:
+        return "maps/fifth_floor.txt"
 
 
 # and x + count_x <= BOARD_HEIGHT and  and y +count_y <= BOARD_WIDTH
@@ -76,13 +85,44 @@ def check_player_position(board):
 
 
 def player_movement(key, board):
+    global floor
     player_x, player_y = check_player_position(board)
+
+    if floor == 0 and board[2][29] == "@":
+        floor = 1
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[2][0] = "@"
+        board[2][29] == "#"
+        return board
+    if floor == 1 and board[19][14] == "@":
+        floor = 2
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[0][14] = "@"
+        board[19][14] == "#"
+        return board
+    if floor == 2 and board[19][22] == "@":
+        floor = 3
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[0][22] = "@"
+        board[19][22] == "#"
+        return board
+    if floor == 3 and board[19][1] == "@":
+        floor = 4
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[0][1] = "@"
+        board[19][1] == "#"
+        return board
+    if floor == 4 and board[19][14] == "@":
+        floor = 5
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[0][14] = "@"
+        board[19][14] == "#"
+        return board
 
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
             board[player_x - 1][player_y] = "@"
             board[player_x][player_y] = "."
-
     elif key == "s":
         if not board[player_x + 1][player_y] == "#":
             board[player_x + 1][player_y] = "@"
@@ -96,7 +136,7 @@ def player_movement(key, board):
             board[player_x][player_y + 1] = "@"
             board[player_x][player_y] = "."
 
-
+    return board
 
 
 # floor parameter is the path to txt file with boards
