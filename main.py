@@ -3,7 +3,7 @@ import engine
 import ui
 
 PLAYER_ICON = '@'
-PLAYER_START_X = 3
+PLAYER_START_X = 15
 PLAYER_START_Y = 3
 
 BOARD_WIDTH = 30
@@ -19,8 +19,13 @@ def create_player():
     Returns:
     dictionary
     '''
-    pass
+    player = {
+        "icon": PLAYER_ICON,
+        "x": PLAYER_START_X,
+        "y": PLAYER_START_Y
+    }
 
+    return player
 
 def main():
     player = create_player()
@@ -33,6 +38,7 @@ def main():
         ui.display_board(board)
 
         key = util.key_pressed()
+        engine.player_movement(key, board)
         if key == 'q':
             is_running = False
         else:
