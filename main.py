@@ -38,11 +38,10 @@ def main():
         ui.display_board(board)
 
         key = util.key_pressed()
-        engine.player_movement(key, board)
         if key == 'q':
             is_running = False
         else:
-            pass
+            engine.player_movement(key, board)
         util.clear_screen()
 
 

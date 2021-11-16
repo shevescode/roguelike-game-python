@@ -3,6 +3,9 @@
 # board is based on rows / height = rows / width = elements in row
 
 
+from main import BOARD_HEIGHT, BOARD_WIDTH
+
+
 def create_board(width, height):
     '''
     Creates a new game board based on input parameters.
@@ -18,9 +21,9 @@ def create_board(width, height):
     temp_list = []
     for j in range(height):
         for i in range(width):
-            if j == 0 or j == height - 1:
+            if (j == 0 or j == height - 1):
                 temp_list.append("#")
-            elif i == 0 or i == width - 1:
+            elif (i == 0 or i == width - 1):
                 temp_list.append("#")
             else:
                 temp_list.append(" ")
@@ -39,8 +42,10 @@ def put_player_on_board(board, player):
     Returns:
     Nothing
     '''
-    x = player["x"]
-    y = player["y"]
+    x, y = check_player_position(board)
+    if x == -1 or y == -1:
+        x = player["x"]
+        y = player["y"]
 
 
     floor = read_board("maps/first_floor.txt")
@@ -49,31 +54,47 @@ def put_player_on_board(board, player):
     count_y = -2
     for i in range(5):
         for j in range(5):
-            board[x + count_x][y + count_y] = floor[x + count_x][y + count_y]
-            count_y += 1
+            if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
+                board[x + count_x][y + count_y] = floor[x + count_x][y + count_y]
+                count_y += 1
         count_x += 1
         count_y = -2
 
     board[x][y] = player["icon"]
 
 
+# and x + count_x <= BOARD_HEIGHT and  and y +count_y <= BOARD_WIDTH
 
-
-def player_movement(key, board):
+def check_player_position(board):
+    player_x, player_y = -1, -1
     for x, i in enumerate(board):
         for y, j in enumerate(i):
             if j == "@":
                 player_x = x
                 player_y = y
-    
+    return player_x, player_y
+
+
+def player_movement(key, board):
+    player_x, player_y = check_player_position(board)
+
     if key == "w":
-        board[player_x - 1][player_y] = "@"
-    if key == "s":
-        board[player_x + 1][player_y] = "@"
-    if key == "a":
-        board[player_x][player_y - 1] = "@"
-    if key == "d":
-        board[player_x][player_y + 1] = "@"
+        if not board[player_x - 1][player_y] == "#":
+            board[player_x - 1][player_y] = "@"
+            board[player_x][player_y] = "."
+
+    elif key == "s":
+        if not board[player_x + 1][player_y] == "#":
+            board[player_x + 1][player_y] = "@"
+            board[player_x][player_y] = "."
+    elif key == "a":
+        if not board[player_x][player_y - 1] == "#":
+            board[player_x][player_y - 1] = "@"
+            board[player_x][player_y] = "."
+    elif key == "d":
+        if not board[player_x][player_y + 1] == "#":
+            board[player_x][player_y + 1] = "@"
+            board[player_x][player_y] = "."
 
 
 
