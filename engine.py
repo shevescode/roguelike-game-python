@@ -1,4 +1,6 @@
 from main import BOARD_HEIGHT, BOARD_WIDTH
+
+import random
 floor = 0
 
 # board is based on rows / height = rows / width = elements in row
@@ -28,7 +30,7 @@ def create_board(width, height):
         temp_list = []
     return board
 
-def put_player_on_board(board, player):
+def put_player_on_board(board, player, floor):
     '''
     Modifies the game board by placing the player icon at its coordinates.
 
@@ -51,7 +53,7 @@ def put_player_on_board(board, player):
     for i in range(5):
         for j in range(5):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
-                board[x + count_x][y + count_y] = current_floor[x + count_x][y + count_y]
+                board[x + count_x][y + count_y] = floor[x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
         count_y = -1
@@ -173,7 +175,7 @@ items_eq = {
     1: {"type": "inv", "name": "sword", "att": 1},
     2: {"type": "inv", "name": "shield", "def": 2},
     3: {"type": "inv", "name": "chest armor", "def": 3},
-    4: {"type": "inv", "name": "key", "open": 1/0},
+    4: {"type": "inv", "name": "key", "open": 1},
     5: {"type": "inv", "name": "helmet", "hp": 1},
     6: {"type": "inv", "name": "artifact", "att": 4},
 }
@@ -182,10 +184,22 @@ items_eq = {
 # items_eq[1]['att'/'def'] - znika/pojawia sie z mapy, zmienia staty gracza
 # items_eq[1]['name'] - informacja dla gracza, co podniosl
 
-def find_empty_space(board):
+def find_empty_space(floor):
     free_spots = []
-    for x, i in enumerate(board):
+    for x, i in enumerate(floor):
         for y, j in enumerate(i):
             if j == ".":
-                temp = 0, 0
+                temp = x, y
                 free_spots.append(temp)
+
+    return free_spots
+
+def place_items(floor):
+    list_of_coordinates = find_empty_space(floor)
+    selected_coordinates = []
+    for i in range(10):
+        x = random.choice(list_of_coordinates)
+        selected_coordinates.append(x)
+
+    for i in selected_coordinates:
+        floor[i[0]][i[1]] = "X"

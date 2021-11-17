@@ -11,6 +11,7 @@ BOARD_HEIGHT = 36
 
 
 
+
 def create_player():
     '''
     Creates a 'player' dictionary for storing all player related informations - i.e. player icon, player position.
@@ -28,13 +29,16 @@ def create_player():
     return player
 
 def main():
+    
     player = create_player()
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-
+    floor_1 = engine.read_board("maps/test_floor.txt")
+    engine.place_items(floor_1)
     util.clear_screen()
     is_running = True
+    print(floor_1)
     while is_running:
-        engine.put_player_on_board(board, player)
+        engine.put_player_on_board(board, player, floor_1)
         ui.display_board(board)
 
         key = util.key_pressed()
