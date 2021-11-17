@@ -48,8 +48,8 @@ def put_player_on_board(board, player):
 
     count_x = -1
     count_y = -1
-    for i in range(3):
-        for j in range(3):
+    for i in range(5):
+        for j in range(5):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
                 board[x + count_x][y + count_y] = current_floor[x + count_x][y + count_y]
                 count_y += 1
@@ -60,8 +60,9 @@ def put_player_on_board(board, player):
 
 
 def change_floor():
+
     if floor == 0:
-        return "maps/first_floor.txt"
+        return "maps/test_floor.txt"
     if floor == 1:
         return "maps/second_floor.txt"
     if floor == 2:
@@ -153,3 +154,11 @@ def read_board(floor):
             temp_list = []
 
     return list
+
+def find_empty_space(board):
+    free_spots = []
+    for x, i in enumerate(board):
+        for y, j in enumerate(i):
+            if j == ".":
+                temp = 0, 0
+                free_spots.append(temp)
