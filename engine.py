@@ -155,6 +155,33 @@ def read_board(floor):
 
     return list
 
+
+items_food = {
+    1: {"type": "food", "name": "apple", "hp": 1},
+    2: {"type": "food", "name": "bread", "hp": 2},
+    3: {"type": "food", "name": "chicken leg", "hp": 3},
+    4: {"type": "food", "name": "cake", "hp": 4},
+    5: {"type": "food", "name": "sweet roll", "hp": 5},
+    6: {"type": "food", "name": "chicken", "hp": 6},
+}
+
+# items_food[1]['type'] - znika/pojawia sie z mapy, nie idzie do inventory
+# items_food[1]['hp'] - znika/pojawia sie z mapy, zmienia staty gracza
+# items_food[1]['name'] - informacja dla gracza, co podniosl
+
+items_eq = {
+    1: {"type": "inv", "name": "sword", "att": 1},
+    2: {"type": "inv", "name": "shield", "def": 2},
+    3: {"type": "inv", "name": "chest armor", "def": 3},
+    4: {"type": "inv", "name": "key", "open": 1/0},
+    5: {"type": "inv", "name": "helmet", "hp": 1},
+    6: {"type": "inv", "name": "artifact", "att": 4},
+}
+
+# items_eq[1]['type'] - znika/pojawia sie z mapy, idzie do inventory
+# items_eq[1]['att'/'def'] - znika/pojawia sie z mapy, zmienia staty gracza
+# items_eq[1]['name'] - informacja dla gracza, co podniosl
+
 def find_empty_space(board):
     free_spots = []
     for x, i in enumerate(board):
