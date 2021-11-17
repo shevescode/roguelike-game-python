@@ -3,11 +3,11 @@ import engine
 import ui
 
 PLAYER_ICON = '@'
-PLAYER_START_X = 15
-PLAYER_START_Y = 3
+PLAYER_START_X = 1
+PLAYER_START_Y = 1
 
-BOARD_WIDTH = 30
-BOARD_HEIGHT = 20
+BOARD_WIDTH = 64
+BOARD_HEIGHT = 36
 
 
 
@@ -38,11 +38,10 @@ def main():
         ui.display_board(board)
 
         key = util.key_pressed()
-        engine.player_movement(key, board)
         if key == 'q':
             is_running = False
         else:
-            pass
+            board = engine.player_movement(key, board)
         util.clear_screen()
 
 
