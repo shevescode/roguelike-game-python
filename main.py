@@ -44,7 +44,7 @@ def main():
         if key == 'q':
             is_running = False
         else:
-            board = engine.player_movement(key, board)
+            board = engine.player_movement(key, board, floors)
         util.clear_screen()
 
 

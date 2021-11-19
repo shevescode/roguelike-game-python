@@ -1,5 +1,6 @@
 from main import BOARD_HEIGHT, BOARD_WIDTH
 import random
+import os
 floor = 0
 
 # board is based on rows / height = rows / width = elements in row
@@ -53,12 +54,11 @@ def put_player_on_board(board, player, floors):
     for i in range(5):
         for j in range(5):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
-                if floor == 0:
-                    board[x + count_x][y + count_y] = floors[0][x + count_x][y + count_y]
-                if floor == 1:
-                    board[x + count_x][y + count_y] = floors[1][x + count_x][y + count_y]
-                if floor == 2:
-                    board[x + count_x][y + count_y] = floors[2][x + count_x][y + count_y]
+                board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
+                # if floor == 1:
+                #     board[x + count_x][y + count_y] = floors[1][x + count_x][y + count_y]
+                # if floor == 2:
+                #     board[x + count_x][y + count_y] = floors[2][x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
         count_y = -1
@@ -92,9 +92,10 @@ def check_player_position(board):
     return player_x, player_y
 
 
-def player_movement(key, board):
+def player_movement(key, board, floors):
     global floor
     player_x, player_y = check_player_position(board)
+    player_stand_on_item(player_x, player_y, key, board, floors)
 
     if floor == 0 and board[3][63] == "@" and key == "d":
         floor = 1
@@ -167,6 +168,35 @@ def player_movement(key, board):
 
     return board
 
+def player_stand_on_item(player_x, player_y, key, board, floors):
+    if key == "w":
+        if board[player_x - 1][player_y] == "X":
+            (floors[floor])[player_x - 1][player_y] = "."
+            draw_item()
+            os.system('pause')
+            return True
+    elif key == "s":
+        if board[player_x + 1][player_y] == "X":
+            (floors[floor])[player_x + 1][player_y] = "."
+            draw_item()
+            os.system('pause')
+            return True
+    elif key == "a":
+        if board[player_x][player_y - 1] == "X":
+            (floors[floor])[player_x][player_y - 1] = "."
+            draw_item()
+            os.system('pause')
+            return True
+    elif key == "d":
+        if board[player_x][player_y + 1] == "X":
+            (floors[floor])[player_x][player_y + 1] = "."
+            draw_item()
+            os.system('pause')
+            return True
+
+def draw_item():
+    item = random.choice(list(items_food))
+    print(item)
 
 # floor parameter is the path to txt file with boards
 # ex. floor = "maps/first_floor.txt"
@@ -238,3 +268,4 @@ def prepare_floors():
     place_items(floor_2)
     place_items(floor_3)
     return floor_1, floor_2, floor_3
+
