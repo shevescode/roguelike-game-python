@@ -24,5 +24,7 @@ def display_board(board):
 def display_stats():
     pass
 
-def display_inventory():
-    pass
+# def display_inventory():
+#     print("Your inventory: ")
+#     for i in main.inventory:
+#         print(i)

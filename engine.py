@@ -3,6 +3,9 @@ import main
 import random
 import os
 floor = 0
+discovered_floor_0 = None
+discovered_floor_1 = None
+discovered_floor_2 = None
 
 
 # board is based on rows / height = rows / width = elements in row
@@ -51,19 +54,15 @@ def put_player_on_board(board, player, floors):
     # current_floor = read_board(change_floor())
 
 
-    count_x = -1
-    count_y = -1
+    count_x = -2
+    count_y = -2
     for i in range(5):
         for j in range(5):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
                 board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
-                # if floor == 1:
-                #     board[x + count_x][y + count_y] = floors[1][x + count_x][y + count_y]
-                # if floor == 2:
-                #     board[x + count_x][y + count_y] = floors[2][x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
-        count_y = -1
+        count_y = -2
 
     board[x][y] = player["icon"]
 
@@ -93,32 +92,48 @@ def check_player_position(board):
                 player_y = y
     return player_x, player_y
 
-
+# zapisac board po zmianie na nastepny floor i przywrocic go przy powrocie
 def player_movement(key, board, floors):
     global floor
+    global discovered_floor_0
+    global discovered_floor_1
+    global discovered_floor_2
     player_x, player_y = check_player_position(board)
-    player_stand_on_item(player_x, player_y, key, board, floors)
 
+# przechodzenie pomiedzy floorami
     if floor == 0 and board[3][63] == "@" and key == "d":
         floor = 1
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        discovered_floor_0 = board
+        if discovered_floor_1 == None:
+            board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        else:
+            board = discovered_floor_1
         board[3][0] = "@"
         return board
     elif floor == 1 and board[3][0] == "@" and key == "a":
         floor = 0
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        discovered_floor_1 = board
+        board = discovered_floor_0
         board[3][63] = "@"
         return board
     elif floor == 1 and board[35][1] == "@" and key == "s":
         floor = 2
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        discovered_floor_1 = board
+        if discovered_floor_2 == None:
+            board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        else:
+            board = discovered_floor_2
         board[0][1] = "@"
         return board
     elif floor == 2 and board[0][1] == "@" and key == "w":
         floor = 1
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        discovered_floor_2 = board
+        board = discovered_floor_1
         board[35][1] = "@"
         return board
+
+# znaleznienie itemu przez gracza
+    player_stand_on_item(player_x, player_y, key, board, floors)
 
     # if floor == 0 and board[2][29] == "@":
     #     floor = 1
@@ -151,6 +166,7 @@ def player_movement(key, board, floors):
     #     board[19][14] == "#"
     #     return board
 
+# ruch gracza
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
             board[player_x - 1][player_y] = "@"
@@ -197,11 +213,28 @@ def player_stand_on_item(player_x, player_y, key, board, floors):
             return True
 
 def draw_item():
-    item = random.choice(list(items_food))
-    score = items_food[item]
-    print(f"You found {score}")
-    main.health += 2
-    print(main.health)
+    select_dict = random.choice(item_list)
+    item = random.choice(list(select_dict))
+    number = random.randint(0, 10)
+    hp_number = random.randint(0, 100)
+    if select_dict == items_food:
+        print(f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} health.")
+        main.health += items_food[item]['hp']
+    if select_dict == items_att:
+        main.inventory.append(f"{items_att[item]['name']} - attack + {number}.")
+        main.attack += number
+        print(main.inventory)
+    if select_dict == items_deff:
+        main.inventory.append(f"{items_deff[item]['name']} - armor + {number}.")
+        main.defence += number
+        print(main.inventory)
+    if select_dict == items_spc:
+        if items_spc[item]['name'] == "helmet":
+            main.inventory.append(f"Helmet - total health + {hp_number}.")
+            main.total_health += hp_number
+        if items_spc[item]['name'] == "key":
+            main.inventory.append(f"Key")
+        print(main.inventory)
 
 # floor parameter is the path to txt file with boards
 # ex. floor = "maps/first_floor.txt"
@@ -220,26 +253,35 @@ def read_board(floor):
 
 
 items_food = {
-    1: {"type": "food", "name": "apple", "hp": 1},
-    2: {"type": "food", "name": "bread", "hp": 2},
-    3: {"type": "food", "name": "chicken leg", "hp": 3},
-    4: {"type": "food", "name": "cake", "hp": 4},
-    5: {"type": "food", "name": "sweet roll", "hp": 5},
-    6: {"type": "food", "name": "chicken", "hp": 6},
+    1: {"type": "food", "name": "an apple", "hp": 1},
+    2: {"type": "food", "name": "a bread", "hp": 2},
+    3: {"type": "food", "name": "a chicken leg", "hp": 3},
+    4: {"type": "food", "name": "a cake", "hp": 4},
+    5: {"type": "food", "name": "a sweet roll", "hp": 5},
+    6: {"type": "food", "name": "a chicken", "hp": 6},
 }
 
 # items_food[1]['type'] - znika/pojawia sie z mapy, nie idzie do inventory
 # items_food[1]['hp'] - znika/pojawia sie z mapy, zmienia staty gracza
 # items_food[1]['name'] - informacja dla gracza, co podniosl
 
-items_eq = {
-    1: {"type": "inv", "name": "sword", "att": 1},
-    2: {"type": "inv", "name": "shield", "def": 2},
-    3: {"type": "inv", "name": "chest armor", "def": 3},
-    4: {"type": "inv", "name": "key", "open": 1},
-    5: {"type": "inv", "name": "helmet", "hp": 1},
-    6: {"type": "inv", "name": "artifact", "att": 4},
+items_att = {
+    1: {"type": "inv", "name": "sword"},
+    6: {"type": "inv", "name": "artifact", "att": 20},
 }
+items_deff = {
+    2: {"type": "inv", "name": "shield"},
+    3: {"type": "inv", "name": "armor"},
+}
+items_spc = {
+    4: {"type": "inv", "name": "key", "open": 1},
+    5: {"type": "inv", "name": "helmet"},
+}
+
+
+# NASZA LISTA SLOWNIKOW
+item_list = [items_food, items_att, items_deff, items_spc]
+
 
 # items_eq[1]['type'] - znika/pojawia sie z mapy, idzie do inventory
 # items_eq[1]['att'/'def'] - znika/pojawia sie z mapy, zmienia staty gracza
@@ -265,6 +307,8 @@ def place_items(floor):
     for i in selected_coordinates:
         floor[i[0]][i[1]] = "X"
 
+
+# wywolane 1 raz w main na początku gry, ustawia przedmioty na 3 poziomach
 def prepare_floors():
     floor_1 = read_board("maps/test_floor.txt")
     floor_2 = read_board("maps/test_floor2.txt")
