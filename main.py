@@ -5,6 +5,7 @@ import ui
 PLAYER_ICON = '@'
 PLAYER_START_X = 23
 PLAYER_START_Y = 5
+health = 100
 
 BOARD_WIDTH = 64
 BOARD_HEIGHT = 36
@@ -39,6 +40,7 @@ def main():
     is_running = True
     while is_running:
         engine.put_player_on_board(board, player, floors)
+        ui.display_health()
         ui.display_board(board)
         key = util.key_pressed()
         if key == 'q':

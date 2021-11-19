@@ -1,6 +1,8 @@
 # import engine
 
 # board = engine.create_board(30,20)
+import main
+
 
 def display_board(board):
     '''
@@ -17,4 +19,10 @@ def display_board(board):
             print(f"{j} ", end="")
         print()
 
-# display_board(board)
+
+
+def display_stats():
+    pass
+
+def display_inventory():
+    pass
