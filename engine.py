@@ -1,7 +1,9 @@
 from main import BOARD_HEIGHT, BOARD_WIDTH
+import main
 import random
 import os
 floor = 0
+
 
 # board is based on rows / height = rows / width = elements in row
 
@@ -196,7 +198,10 @@ def player_stand_on_item(player_x, player_y, key, board, floors):
 
 def draw_item():
     item = random.choice(list(items_food))
-    print(item)
+    score = items_food[item]
+    print(f"You found {score}")
+    main.health += 2
+    print(main.health)
 
 # floor parameter is the path to txt file with boards
 # ex. floor = "maps/first_floor.txt"

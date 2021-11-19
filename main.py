@@ -40,7 +40,6 @@ def main():
     is_running = True
     while is_running:
         engine.put_player_on_board(board, player, floors)
-        ui.display_health()
         ui.display_board(board)
         key = util.key_pressed()
         if key == 'q':
