@@ -1,5 +1,4 @@
 from main import BOARD_HEIGHT, BOARD_WIDTH
-
 import random
 floor = 0
 
@@ -30,7 +29,7 @@ def create_board(width, height):
         temp_list = []
     return board
 
-def put_player_on_board(board, player, floor):
+def put_player_on_board(board, player, floors):
     '''
     Modifies the game board by placing the player icon at its coordinates.
 
@@ -46,14 +45,20 @@ def put_player_on_board(board, player, floor):
         x = player["x"]
         y = player["y"]
 
-    current_floor = read_board(change_floor())
+    # current_floor = read_board(change_floor())
+
 
     count_x = -1
     count_y = -1
     for i in range(5):
         for j in range(5):
             if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
-                board[x + count_x][y + count_y] = floor[x + count_x][y + count_y]
+                if floor == 0:
+                    board[x + count_x][y + count_y] = floors[0][x + count_x][y + count_y]
+                if floor == 1:
+                    board[x + count_x][y + count_y] = floors[1][x + count_x][y + count_y]
+                if floor == 2:
+                    board[x + count_x][y + count_y] = floors[2][x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
         count_y = -1
@@ -61,18 +66,18 @@ def put_player_on_board(board, player, floor):
     board[x][y] = player["icon"]
 
 
-def change_floor():
+# def change_floor():
 
-    if floor == 0:
-        return "maps/test_floor.txt"
-    if floor == 1:
-        return "maps/second_floor.txt"
-    if floor == 2:
-        return "maps/third_floor.txt"
-    if floor == 3:
-        return "maps/fourth_floor.txt"
-    if floor == 4:
-        return "maps/fifth_floor.txt"
+#     if floor == 0:
+#         return "maps/test_floor.txt"
+#     if floor == 1:
+#         return "maps/second_floor.txt"
+#     if floor == 2:
+#         return "maps/third_floor.txt"
+#     if floor == 3:
+#         return "maps/fourth_floor.txt"
+#     if floor == 4:
+#         return "maps/fifth_floor.txt"
 
 
 # and x + count_x <= BOARD_HEIGHT and  and y +count_y <= BOARD_WIDTH
@@ -91,36 +96,57 @@ def player_movement(key, board):
     global floor
     player_x, player_y = check_player_position(board)
 
-    if floor == 0 and board[2][29] == "@":
+    if floor == 0 and board[3][63] == "@" and key == "d":
         floor = 1
         board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-        board[2][0] = "@"
-        board[2][29] == "#"
+        board[3][0] = "@"
         return board
-    if floor == 1 and board[19][14] == "@":
+    elif floor == 1 and board[3][0] == "@" and key == "a":
+        floor = 0
+        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+        board[3][63] = "@"
+        return board
+    elif floor == 1 and board[35][1] == "@" and key == "s":
         floor = 2
         board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-        board[0][14] = "@"
-        board[19][14] == "#"
-        return board
-    if floor == 2 and board[19][22] == "@":
-        floor = 3
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-        board[0][22] = "@"
-        board[19][22] == "#"
-        return board
-    if floor == 3 and board[19][1] == "@":
-        floor = 4
-        board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
         board[0][1] = "@"
-        board[19][1] == "#"
         return board
-    if floor == 4 and board[19][14] == "@":
-        floor = 5
+    elif floor == 2 and board[0][1] == "@" and key == "w":
+        floor = 1
         board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-        board[0][14] = "@"
-        board[19][14] == "#"
+        board[35][1] = "@"
         return board
+
+    # if floor == 0 and board[2][29] == "@":
+    #     floor = 1
+    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    #     board[2][0] = "@"
+    #     board[2][29] == "#"
+    #     return board
+    # if floor == 1 and board[19][14] == "@":
+    #     floor = 2
+    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    #     board[0][14] = "@"
+    #     board[19][14] == "#"
+    #     return board
+    # if floor == 2 and board[19][22] == "@":
+    #     floor = 3
+    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    #     board[0][22] = "@"
+    #     board[19][22] == "#"
+    #     return board
+    # if floor == 3 and board[19][1] == "@":
+    #     floor = 4
+    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    #     board[0][1] = "@"
+    #     board[19][1] == "#"
+    #     return board
+    # if floor == 4 and board[19][14] == "@":
+    #     floor = 5
+    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    #     board[0][14] = "@"
+    #     board[19][14] == "#"
+    #     return board
 
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
@@ -203,3 +229,12 @@ def place_items(floor):
 
     for i in selected_coordinates:
         floor[i[0]][i[1]] = "X"
+
+def prepare_floors():
+    floor_1 = read_board("maps/test_floor.txt")
+    floor_2 = read_board("maps/test_floor2.txt")
+    floor_3 = read_board("maps/test_floor3.txt")
+    place_items(floor_1)
+    place_items(floor_2)
+    place_items(floor_3)
+    return floor_1, floor_2, floor_3

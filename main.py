@@ -3,8 +3,8 @@ import engine
 import ui
 
 PLAYER_ICON = '@'
-PLAYER_START_X = 1
-PLAYER_START_Y = 1
+PLAYER_START_X = 23
+PLAYER_START_Y = 5
 
 BOARD_WIDTH = 64
 BOARD_HEIGHT = 36
@@ -29,18 +29,17 @@ def create_player():
     return player
 
 def main():
-    
     player = create_player()
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    floor_1 = engine.read_board("maps/test_floor.txt")
-    engine.place_items(floor_1)
+    # floor_1 = engine.read_board("maps/test_floor.txt")
+    # engine.place_items(floor_1)
     util.clear_screen()
+    floor_0, floor_1, floor_2 = engine.prepare_floors()
+    floors = floor_0, floor_1, floor_2
     is_running = True
-    print(floor_1)
     while is_running:
-        engine.put_player_on_board(board, player, floor_1)
+        engine.put_player_on_board(board, player, floors)
         ui.display_board(board)
-
         key = util.key_pressed()
         if key == 'q':
             is_running = False
