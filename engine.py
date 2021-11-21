@@ -58,7 +58,7 @@ def put_player_on_board(board, player, floors):
     count_y = -2
     for i in range(5):
         for j in range(5):
-            if x + count_x in range(BOARD_HEIGHT) and y + count_y in range(BOARD_WIDTH):
+            if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
                 board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
@@ -100,6 +100,8 @@ def player_movement(key, board, floors):
     global discovered_floor_2
     player_x, player_y = check_player_position(board)
 # przechodzenie pomiedzy floorami
+
+#TODO: zrobić w innej funkcji
     if floor == 0 and board[3][63] == "@" and key == "d":
         floor = 1
         discovered_floor_0 = board
@@ -215,10 +217,11 @@ def draw_item():
     select_dict = random.choice(item_list)
     item = random.choice(list(select_dict))
     number = random.randint(0, 10)
-    if items_att[item]['name'] == "artifact":
+    if select_dict == items_att and items_att[item]['name'] == "artifact":
         number = items_att[item]['att']
     hp_number = random.randint(0, 100)
     adjective = ""
+    #TODO: poprawić opisy i nazwy przedmiotow umiescic inventory items w jednym slowniku i napisac uniwersalne printy
     if number <= 3:
         adjective = "chujowy "
     elif number <= 6:
@@ -241,7 +244,7 @@ def draw_item():
     if select_dict == items_spc:
         if items_spc[item]['name'] == "helmet":
             print(f"You found a helmet. It increase your total health by {hp_number}. It was added to your inventory.")
-            main.inventory.append(f"Helmet - total health + {hp_number}.")
+            main.inventory.append(f"helmet - total health + {hp_number}.")
             main.total_health += hp_number
         if items_spc[item]['name'] == "key":
             print("You found a key! It was added to your inventory.")

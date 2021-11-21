@@ -45,7 +45,6 @@ def main():
     while is_running:
         engine.put_player_on_board(board, player, floors)
         ui.display_board(board)
-        # ui.display_inventory()
         ui.display_stats()
         key = util.key_pressed()
         if key == 'q':
