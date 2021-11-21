@@ -215,6 +215,8 @@ def draw_item():
     select_dict = random.choice(item_list)
     item = random.choice(list(select_dict))
     number = random.randint(0, 10)
+    if items_att[item]['name'] == "artifact":
+        number = items_att[item]['att']
     hp_number = random.randint(0, 100)
     adjective = ""
     if number <= 3:
