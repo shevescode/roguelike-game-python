@@ -25,4 +25,4 @@ def display_board(board):
 
 
 def display_stats():
-    print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOR: {main.armor}")
+    print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOUR: {main.armour}")

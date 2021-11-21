@@ -1,3 +1,4 @@
+import os
 import util
 import engine
 import ui
@@ -6,7 +7,7 @@ PLAYER_ICON = '@'
 PLAYER_START_X = 23
 PLAYER_START_Y = 5
 attack = 10
-armor = 10
+armour = 10
 health = 100
 total_health = 150
 inventory = ["Your Inventory: "]

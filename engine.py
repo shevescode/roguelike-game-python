@@ -35,6 +35,7 @@ def create_board(width, height):
         temp_list = []
     return board
 
+
 def put_player_on_board(board, player, floors):
     '''
     Modifies the game board by placing the player icon at its coordinates.
@@ -53,13 +54,13 @@ def put_player_on_board(board, player, floors):
 
     # current_floor = read_board(change_floor())
 
-
     count_x = -2
     count_y = -2
     for i in range(5):
         for j in range(5):
             if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
-                board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
+                board[x + count_x][y + count_y] = floors[floor][x +
+                                                                count_x][y + count_y]
                 count_y += 1
         count_x += 1
         count_y = -2
@@ -93,6 +94,8 @@ def check_player_position(board):
     return player_x, player_y
 
 # zapisac board po zmianie na nastepny floor i przywrocic go przy powrocie
+
+
 def player_movement(key, board, floors):
     global floor
     global discovered_floor_0
@@ -187,6 +190,7 @@ def player_movement(key, board, floors):
 
     return board
 
+
 def player_stand_on_item(player_x, player_y, key, board, floors):
     if key == "w":
         if board[player_x - 1][player_y] == "X":
@@ -213,41 +217,58 @@ def player_stand_on_item(player_x, player_y, key, board, floors):
             os.system('pause')
             return True
 
+
 def draw_item():
     select_dict = random.choice(item_list)
     item = random.choice(list(select_dict))
-    number = random.randint(0, 10)
-    if select_dict == items_att and items_att[item]['name'] == "artifact":
-        number = items_att[item]['att']
-    hp_number = random.randint(0, 100)
+    number = random.randint(1, 10)
+    hp_number = random.randint(1, 100)
+    if select_dict == eq_items and eq_items[item]['name'] == "artifact":
+        ability = random.choice(artifact_ability_list)
+        number = eq_items[item]['att']
+    elif select_dict == eq_items and eq_items[item]['name'] == "helmet":
+        number = hp_number
     adjective = ""
-    #TODO: poprawić opisy i nazwy przedmiotow umiescic inventory items w jednym slowniku i napisac uniwersalne printy
-    if number <= 3:
-        adjective = "chujowy "
+    if 1 <= number <= 3:
+        adjective = "basic "
     elif number <= 6:
-        adjective = "normalny "
+        adjective = "improved "
     elif number <= 9:
-        adjective = "zajebisty "
-    elif number >= 10:
         adjective = "magic "
+    elif number >= 10:
+        adjective = "unique "
     if select_dict == items_food:
-        print(f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} health.")
+        print(
+            f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} {items_food[item]['function']}")
         main.health += items_food[item]['hp']
-    if select_dict == items_att:
-        print(f"You found {adjective}{items_att[item]['name']}. It has {number} attack. It was added to your inventory.")
-        main.inventory.append(f"{items_att[item]['name']} - attack + {number}.")
-        main.attack += number
-    if select_dict == items_deff:
-        print(f"You found {adjective}{items_deff[item]['name']}. It has {number} armor. It was added to your inventory.")
-        main.inventory.append(f"{items_deff[item]['name']} - armor + {number}.")
-        main.armor += number
-    if select_dict == items_spc:
-        if items_spc[item]['name'] == "helmet":
-            print(f"You found a helmet. It increase your total health by {hp_number}. It was added to your inventory.")
-            main.inventory.append(f"helmet - total health + {hp_number}.")
-            main.total_health += hp_number
-        if items_spc[item]['name'] == "key":
-            print("You found a key! It was added to your inventory.")
+
+    if select_dict == eq_items:
+        if eq_items[item]['name'] != "key" and eq_items[item]['name'] != "artifact":
+            print(
+                f"You found {adjective}{eq_items[item]['name']}. It's increasing {eq_items[item]['function']} by {number}. It was added to your inventory.")
+            main.inventory.append(
+                f"{adjective}{eq_items[item]['name']} - {eq_items[item]['function']} + {number}.")
+
+            if eq_items[item]['name'] == "sword":
+                main.attack += number
+            if eq_items[item]['name'] == "shield":
+                main.armour += number
+            if eq_items[item]['name'] == "armour":
+                main.armour += number
+            if eq_items[item]['name'] == "helmet":
+                main.total_health += number
+        elif eq_items[item]['name'] == "artifact":
+            print(
+                f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
+            if ability == "deffence":
+                main.armour += number
+                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA
+            else:
+                main.attack += number
+                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA
+        elif eq_items[item]['name'] == "key":
+            print(
+                f"You've found an {eq_items[item]['name']}! It was added to your inventory.")
             main.inventory.append(f"Key")
 
 # floor parameter is the path to txt file with boards
@@ -265,41 +286,28 @@ def read_board(floor):
 
     return list
 
-
+#ITEM DICTIONARIES 
 items_food = {
-    1: {"type": "food", "name": "an apple", "hp": 1},
-    2: {"type": "food", "name": "a bread", "hp": 2},
-    3: {"type": "food", "name": "a chicken leg", "hp": 3},
-    4: {"type": "food", "name": "a cake", "hp": 4},
-    5: {"type": "food", "name": "a sweet roll", "hp": 5},
-    6: {"type": "food", "name": "a chicken", "hp": 6},
+    1: {"type": "food", "name": "an apple", "hp": 1, "function": "health point."},
+    2: {"type": "food", "name": "a bread", "hp": 2, "function": "health points."},
+    3: {"type": "food", "name": "a chicken leg", "hp": 3, "function": "health points."},
+    4: {"type": "food", "name": "a cake", "hp": 4, "function": "health points."},
+    5: {"type": "food", "name": "a sweet roll", "hp": 5, "function": "health points."},
+    6: {"type": "food", "name": "a chicken", "hp": 6, "function": "health points."},
 }
 
-# items_food[1]['type'] - znika/pojawia sie z mapy, nie idzie do inventory
-# items_food[1]['hp'] - znika/pojawia sie z mapy, zmienia staty gracza
-# items_food[1]['name'] - informacja dla gracza, co podniosl
-
-items_att = {
-    1: {"type": "inv", "name": "sword"},
-    6: {"type": "inv", "name": "artifact", "att": 20},
-}
-items_deff = {
-    2: {"type": "inv", "name": "shield"},
-    3: {"type": "inv", "name": "armor"},
-}
-items_spc = {
-    4: {"type": "inv", "name": "key", "open": 1},
-    5: {"type": "inv", "name": "helmet"},
+eq_items = {
+    1: {"type": "inv", "name": "sword", "function": "attack points"},
+    2: {"type": "inv", "name": "shield", "function": "deffence points"},
+    3: {"type": "inv", "name": "armour", "function": "deffence points"},
+    4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
+    5: {"type": "inv", "name": "helmet", "function": "total healt points"},
+    6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
-
-# NASZA LISTA SLOWNIKOW
-item_list = [items_food, items_att, items_deff, items_spc]
-
-
-# items_eq[1]['type'] - znika/pojawia sie z mapy, idzie do inventory
-# items_eq[1]['att'/'def'] - znika/pojawia sie z mapy, zmienia staty gracza
-# items_eq[1]['name'] - informacja dla gracza, co podniosl
+#LISTS TO RANDOM CHOICE
+item_list = [items_food, eq_items]
+artifact_ability_list = ["attack points", "deffence points"]
 
 def find_empty_space(floor):
     free_spots = []
@@ -310,6 +318,7 @@ def find_empty_space(floor):
                 free_spots.append(temp)
 
     return free_spots
+
 
 def place_items(floor):
     list_of_coordinates = find_empty_space(floor)
@@ -331,4 +340,3 @@ def prepare_floors():
     place_items(floor_2)
     place_items(floor_3)
     return floor_1, floor_2, floor_3
-
