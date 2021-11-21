@@ -99,7 +99,6 @@ def player_movement(key, board, floors):
     global discovered_floor_1
     global discovered_floor_2
     player_x, player_y = check_player_position(board)
-
 # przechodzenie pomiedzy floorami
     if floor == 0 and board[3][63] == "@" and key == "d":
         floor = 1
@@ -217,24 +216,34 @@ def draw_item():
     item = random.choice(list(select_dict))
     number = random.randint(0, 10)
     hp_number = random.randint(0, 100)
+    adjective = ""
+    if number <= 3:
+        adjective = "chujowy "
+    elif number <= 6:
+        adjective = "normalny "
+    elif number <= 9:
+        adjective = "zajebisty "
+    elif number >= 10:
+        adjective = "magic "
     if select_dict == items_food:
         print(f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} health.")
         main.health += items_food[item]['hp']
     if select_dict == items_att:
+        print(f"You found {adjective}{items_att[item]['name']}. It has {number} attack. It was added to your inventory.")
         main.inventory.append(f"{items_att[item]['name']} - attack + {number}.")
         main.attack += number
-        print(main.inventory)
     if select_dict == items_deff:
+        print(f"You found {adjective}{items_deff[item]['name']}. It has {number} armor. It was added to your inventory.")
         main.inventory.append(f"{items_deff[item]['name']} - armor + {number}.")
-        main.defence += number
-        print(main.inventory)
+        main.armor += number
     if select_dict == items_spc:
         if items_spc[item]['name'] == "helmet":
+            print(f"You found a helmet. It increase your total health by {hp_number}. It was added to your inventory.")
             main.inventory.append(f"Helmet - total health + {hp_number}.")
             main.total_health += hp_number
         if items_spc[item]['name'] == "key":
+            print("You found a key! It was added to your inventory.")
             main.inventory.append(f"Key")
-        print(main.inventory)
 
 # floor parameter is the path to txt file with boards
 # ex. floor = "maps/first_floor.txt"

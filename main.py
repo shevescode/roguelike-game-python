@@ -6,10 +6,10 @@ PLAYER_ICON = '@'
 PLAYER_START_X = 23
 PLAYER_START_Y = 5
 attack = 10
-defence = 10
+armor = 10
 health = 100
-total_health = 200
-inventory = []
+total_health = 150
+inventory = ["Your Inventory: "]
 
 BOARD_WIDTH = 64
 BOARD_HEIGHT = 36
@@ -46,6 +46,7 @@ def main():
         engine.put_player_on_board(board, player, floors)
         ui.display_board(board)
         # ui.display_inventory()
+        ui.display_stats()
         key = util.key_pressed()
         if key == 'q':
             is_running = False

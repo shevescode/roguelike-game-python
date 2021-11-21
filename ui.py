@@ -11,20 +11,23 @@ def display_board(board):
     Returns:
     Nothing
     '''
-    for i in board:
+    for index, i in enumerate(board):
         # for x in range(50):
         #     print(" ", end="")
         # moves board 50 " " to right
         for j in i:
             print(f"{j} ", end="")
-        print()
+        if len(main.inventory) > index:
+            print(main.inventory[index])
+        else:
+            print()
 
 
 
 def display_stats():
-    pass
+    print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOR: {main.armor}")
 
-# def display_inventory():
-#     print("Your inventory: ")
-#     for i in main.inventory:
-#         print(i)
+def display_inventory():
+    print("Your inventory: ")
+    for i in main.inventory:
+        print(i)
