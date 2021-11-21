@@ -68,22 +68,6 @@ def put_player_on_board(board, player, floors):
     board[x][y] = player["icon"]
 
 
-# def change_floor():
-
-#     if floor == 0:
-#         return "maps/test_floor.txt"
-#     if floor == 1:
-#         return "maps/second_floor.txt"
-#     if floor == 2:
-#         return "maps/third_floor.txt"
-#     if floor == 3:
-#         return "maps/fourth_floor.txt"
-#     if floor == 4:
-#         return "maps/fifth_floor.txt"
-
-
-# and x + count_x <= BOARD_HEIGHT and  and y +count_y <= BOARD_WIDTH
-
 def check_player_position(board):
     player_x, player_y = -1, -1
     for x, i in enumerate(board):
@@ -92,8 +76,6 @@ def check_player_position(board):
                 player_x = x
                 player_y = y
     return player_x, player_y
-
-# zapisac board po zmianie na nastepny floor i przywrocic go przy powrocie
 
 
 def player_movement(key, board, floors):
@@ -138,37 +120,6 @@ def player_movement(key, board, floors):
 
 # znaleznienie itemu przez gracza
     player_stand_on_item(player_x, player_y, key, board, floors)
-
-    # if floor == 0 and board[2][29] == "@":
-    #     floor = 1
-    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #     board[2][0] = "@"
-    #     board[2][29] == "#"
-    #     return board
-    # if floor == 1 and board[19][14] == "@":
-    #     floor = 2
-    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #     board[0][14] = "@"
-    #     board[19][14] == "#"
-    #     return board
-    # if floor == 2 and board[19][22] == "@":
-    #     floor = 3
-    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #     board[0][22] = "@"
-    #     board[19][22] == "#"
-    #     return board
-    # if floor == 3 and board[19][1] == "@":
-    #     floor = 4
-    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #     board[0][1] = "@"
-    #     board[19][1] == "#"
-    #     return board
-    # if floor == 4 and board[19][14] == "@":
-    #     floor = 5
-    #     board = create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #     board[0][14] = "@"
-    #     board[19][14] == "#"
-    #     return board
 
 # ruch gracza
     if key == "w":
@@ -218,7 +169,7 @@ def player_stand_on_item(player_x, player_y, key, board, floors):
             return True
 
 
-def draw_item():
+def draw_item(): #rozbić na dwie funkcje???
     select_dict = random.choice(item_list)
     item = random.choice(list(select_dict))
     number = random.randint(1, 10)
@@ -248,7 +199,7 @@ def draw_item():
                 f"You found {adjective}{eq_items[item]['name']}. It's increasing {eq_items[item]['function']} by {number}. It was added to your inventory.")
             main.inventory.append(
                 f"{adjective}{eq_items[item]['name']} - {eq_items[item]['function']} + {number}.")
-
+#FIXME: zapisać printy do UI
             if eq_items[item]['name'] == "sword":
                 main.attack += number
             if eq_items[item]['name'] == "shield":
@@ -260,9 +211,9 @@ def draw_item():
         elif eq_items[item]['name'] == "artifact":
             print(
                 f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
-            if ability == "deffence":
+            if ability == "deffence points":
                 main.armour += number
-                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA
+                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa dzika 
             else:
                 main.attack += number
                 # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA
@@ -286,7 +237,7 @@ def read_board(floor):
 
     return list
 
-#ITEM DICTIONARIES 
+#ITEM DICTIONARIES
 items_food = {
     1: {"type": "food", "name": "an apple", "hp": 1, "function": "health point."},
     2: {"type": "food", "name": "a bread", "hp": 2, "function": "health points."},
@@ -295,19 +246,19 @@ items_food = {
     5: {"type": "food", "name": "a sweet roll", "hp": 5, "function": "health points."},
     6: {"type": "food", "name": "a chicken", "hp": 6, "function": "health points."},
 }
-
 eq_items = {
-    1: {"type": "inv", "name": "sword", "function": "attack points"},
-    2: {"type": "inv", "name": "shield", "function": "deffence points"},
-    3: {"type": "inv", "name": "armour", "function": "deffence points"},
-    4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
-    5: {"type": "inv", "name": "helmet", "function": "total healt points"},
+    # 1: {"type": "inv", "name": "sword", "function": "attack points"},
+    # 2: {"type": "inv", "name": "shield", "function": "deffence points"},
+    # 3: {"type": "inv", "name": "armour", "function": "deffence points"},
+    # 4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
+    # 5: {"type": "inv", "name": "helmet", "function": "total healt points"},
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
 #LISTS TO RANDOM CHOICE
-item_list = [items_food, eq_items]
+item_list = [eq_items]
 artifact_ability_list = ["attack points", "deffence points"]
+
 
 def find_empty_space(floor):
     free_spots = []
