@@ -4,7 +4,7 @@
 import os
 import main
 
-def display_board(board):
+def display_board(board, inv):
     '''
     Displays complete game board on the screen
 
@@ -17,29 +17,29 @@ def display_board(board):
         # moves board 50 " " to right
         for j in i:
             print(f"{j} ", end="")
-        # if len(main.inventory) > index:
-        #     print(main.inventory[index])
+        if len(main.inventory) > index and inv == 1:
+            print(main.inventory[index])
         else:
             print()
 
 
-def display_inventory(key):
-    '''
-    Displays inventory on the screen
+# def display_inventory(key):
+#     '''
+#     Displays inventory on the screen
 
-    Returns:
-    Nothing
-    '''
-    if key == "i":
-        print("\nYour inventory: ")
-        if len(main.inventory) == 0:
-            print("Your inventory is empty.")
-        else:
-            for equipment in main.inventory:
-                print(equipment)
+#     Returns:
+#     Nothing
+#     '''
+#     if key == "i":
+#         print("\nYour inventory: ")
+#         if len(main.inventory) == 0:
+#             print("Your inventory is empty.")
+#         else:
+#             for equipment in main.inventory:
+#                 print(equipment)
 
-    print()
-    os.system("pause")
+#     print()
+#     os.system("pause")
 
 
 def display_stats():

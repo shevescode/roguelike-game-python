@@ -193,6 +193,7 @@ def draw_item():
 
 
 def drew_item_informations(number, adjective, select_dict, item, ability):
+    
     if select_dict == items_food:
         print(
             f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} {items_food[item]['function']}")
