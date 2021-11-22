@@ -33,7 +33,6 @@ def create_player():
     return player
 
 def main():
-    global show_inventory
     player = create_player()
     show_inventory = 0
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
@@ -53,6 +52,7 @@ def main():
 
         else:
             board = engine.player_movement(key, board, floors)
+            floors = engine.monsters_movement(floors)
             show_inventory = 0
         util.clear_screen()
         print(show_inventory)

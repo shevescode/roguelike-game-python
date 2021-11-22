@@ -56,8 +56,7 @@ def put_player_on_board(board, player, floors):
     for i in range(5):
         for j in range(5):
             if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
-                board[x + count_x][y + count_y] = floors[floor][x +
-                                                                count_x][y + count_y]
+                board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
                 count_y += 1
         count_x += 1
         count_y = -2
@@ -193,7 +192,7 @@ def draw_item():
 
 
 def drew_item_informations(number, adjective, select_dict, item, ability):
-    
+
     if select_dict == items_food:
         print(
             f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} {items_food[item]['function']}")
@@ -280,12 +279,16 @@ def find_empty_space(floor):
 def place_items(floor):
     list_of_coordinates = find_empty_space(floor)
     selected_coordinates = []
-    for i in range(10):
+    for i in range(20):
         x = random.choice(list_of_coordinates)
         selected_coordinates.append(x)
-
+    count = 0
     for i in selected_coordinates:
-        floor[i[0]][i[1]] = "X"
+        if count <= 10:
+            floor[i[0]][i[1]] = "X"
+        else:
+            floor[i[0]][i[1]] = "M"
+        count += 1
 
 
 # wywolane 1 raz w main na początku gry, ustawia przedmioty na 3 poziomach
@@ -297,3 +300,54 @@ def prepare_floors():
     place_items(floor_2)
     place_items(floor_3)
     return floor_1, floor_2, floor_3
+
+"""
+parameters: floors
+potwory poruszaja sie po mapie nawet ktorej nie widac
+return: floors
+"""
+def monsters_movement(floors):
+    monsters_xy_list = check_monster_position(floors)
+    directions = ["w", "s", "a", "d"]
+    for i in monsters_xy_list:
+        random_direction = random.choice(directions)
+        x, y = i
+        if random_direction == "w":
+            if (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " ":
+                continue
+            else:
+                (floors[floor])[x - 1][y] = "M"
+                (floors[floor])[x][y] = "."
+        elif random_direction == "s":
+            if (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " ":
+                continue
+            else:
+                (floors[floor])[x + 1][y] = "M"
+                (floors[floor])[x][y] = "."
+        elif random_direction == "a":
+            if (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " ":
+                continue
+            else:
+                (floors[floor])[x][y - 1] = "M"
+                (floors[floor])[x][y] = "."
+        elif random_direction == "d":
+            if (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " ":
+                continue
+            else:
+                (floors[floor])[x][y + 1] = "M"
+                (floors[floor])[x][y] = "."
+    return floors
+
+"""
+parameters: floors
+zbiera liste koordynatow potworow
+return: lista koordynatow potworow
+"""
+def check_monster_position(floors):
+    monsters_xy_list = []
+    for x, i in enumerate(floors[floor]):
+        for y, j in enumerate(i):
+            if j == "M":
+                temp = x, y
+                monsters_xy_list.append(temp)
+    return monsters_xy_list
