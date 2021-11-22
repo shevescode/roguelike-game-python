@@ -6,8 +6,6 @@ floor = 0
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
-
-
 # board is based on rows / height = rows / width = elements in row
 
 def create_board(width, height):
@@ -34,7 +32,6 @@ def create_board(width, height):
         board.append(temp_list)
         temp_list = []
     return board
-
 
 def put_player_on_board(board, player, floors):
     '''
@@ -169,18 +166,21 @@ def player_stand_on_item(player_x, player_y, key, board, floors):
             return True
 
 
-def draw_item(): #rozbić na dwie funkcje???
+def draw_item():
     select_dict = random.choice(item_list)
     item = random.choice(list(select_dict))
     number = random.randint(1, 10)
-    hp_number = random.randint(1, 100)
+    ability = ""
     if select_dict == eq_items and eq_items[item]['name'] == "artifact":
-        ability = random.choice(artifact_ability_list)
+        finall_ability = random.choice(artifact_ability_list)
+        ability = finall_ability
         number = eq_items[item]['att']
-    elif select_dict == eq_items and eq_items[item]['name'] == "helmet":
+    if select_dict == eq_items and eq_items[item]['name'] == "helmet":
+        hp_number = random.randint(1, 100)
         number = hp_number
+
     adjective = ""
-    if 1 <= number <= 3:
+    if number <= 3:
         adjective = "basic "
     elif number <= 6:
         adjective = "improved "
@@ -188,6 +188,11 @@ def draw_item(): #rozbić na dwie funkcje???
         adjective = "magic "
     elif number >= 10:
         adjective = "unique "
+
+    drew_item_informations(number, adjective, select_dict, item, ability)
+
+
+def drew_item_informations(number, adjective, select_dict, item, ability):
     if select_dict == items_food:
         print(
             f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} {items_food[item]['function']}")
@@ -213,10 +218,10 @@ def draw_item(): #rozbić na dwie funkcje???
                 f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
             if ability == "deffence points":
                 main.armour += number
-                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa dzika 
+                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa obrony 
             else:
                 main.attack += number
-                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA
+                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa ataku
         elif eq_items[item]['name'] == "key":
             print(
                 f"You've found an {eq_items[item]['name']}! It was added to your inventory.")
@@ -247,11 +252,11 @@ items_food = {
     6: {"type": "food", "name": "a chicken", "hp": 6, "function": "health points."},
 }
 eq_items = {
-    # 1: {"type": "inv", "name": "sword", "function": "attack points"},
-    # 2: {"type": "inv", "name": "shield", "function": "deffence points"},
-    # 3: {"type": "inv", "name": "armour", "function": "deffence points"},
-    # 4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
-    # 5: {"type": "inv", "name": "helmet", "function": "total healt points"},
+    1: {"type": "inv", "name": "sword", "function": "attack points"},
+    2: {"type": "inv", "name": "shield", "function": "deffence points"},
+    3: {"type": "inv", "name": "armour", "function": "deffence points"},
+    4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
+    5: {"type": "inv", "name": "helmet", "function": "total healt points"},
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 

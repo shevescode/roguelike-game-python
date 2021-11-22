@@ -1,8 +1,8 @@
 # import engine
 
 # board = engine.create_board(30,20)
+import os
 import main
-
 
 def display_board(board):
     '''
@@ -17,12 +17,32 @@ def display_board(board):
         # moves board 50 " " to right
         for j in i:
             print(f"{j} ", end="")
-        if len(main.inventory) > index:
-            print(main.inventory[index])
+        # if len(main.inventory) > index:
+        #     print(main.inventory[index])
         else:
             print()
 
 
+def display_inventory(key):
+    '''
+    Displays inventory on the screen
+
+    Returns:
+    Nothing
+    '''
+    if key == "i":
+        print("\nYour inventory: ")
+        if len(main.inventory) == 0:
+            print("Your inventory is empty.")
+        else:
+            for equipment in main.inventory:
+                print(equipment)
+
+    print()
+    os.system("pause")
+
 
 def display_stats():
     print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOUR: {main.armour}")
+
+

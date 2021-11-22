@@ -10,12 +10,11 @@ attack = 10
 armour = 10
 health = 100
 total_health = 150
-inventory = ["Your Inventory: "]
+inventory = []
+
 
 BOARD_WIDTH = 64
 BOARD_HEIGHT = 36
-
-
 
 
 def create_player():
@@ -37,8 +36,8 @@ def create_player():
 def main():
     player = create_player()
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    # floor_1 = engine.read_board("maps/test_floor.txt")
-    # engine.place_items(floor_1)
+    floor_1 = engine.read_board("maps/test_floor.txt")
+    engine.place_items(floor_1)
     util.clear_screen()
     floor_0, floor_1, floor_2 = engine.prepare_floors()
     floors = floor_0, floor_1, floor_2
@@ -50,6 +49,8 @@ def main():
         key = util.key_pressed()
         if key == 'q':
             is_running = False
+        elif key == "i":
+            ui.display_inventory(key)
         else:
             board = engine.player_movement(key, board, floors)
         util.clear_screen()
