@@ -50,7 +50,7 @@ def put_player_on_board(board, player, floors):
         y = player["y"]
 
     # current_floor = read_board(change_floor())
-
+    remove_monsters_from_eyeshot(board)
     count_x = -2
     count_y = -2
     for i in range(5):
@@ -137,6 +137,12 @@ def player_movement(key, board, floors):
 
     return board
 
+def remove_monsters_from_eyeshot(board):
+    for x, i in enumerate(board):
+        for y, j in enumerate(i):
+            if j == "M":
+                board[x][y] = "."
+    return board
 
 def player_stand_on_item(player_x, player_y, key, board, floors):
     if key == "w":
