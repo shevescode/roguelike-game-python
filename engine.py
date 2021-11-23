@@ -6,6 +6,7 @@ floor = 0
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
+icanseeyou = 0
 # board is based on rows / height = rows / width = elements in row
 
 def create_board(width, height):
@@ -51,17 +52,30 @@ def put_player_on_board(board, player, floors):
 
     # current_floor = read_board(change_floor())
     remove_monsters_from_eyeshot(board)
-    count_x = -2
-    count_y = -2
-    for i in range(5):
-        for j in range(5):
-            if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
-                board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
-                count_y += 1
-        count_x += 1
+
+    if icanseeyou == 0:
+        count_x = -2
         count_y = -2
+        for i in range(5):
+            for j in range(5):
+                if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
+                    board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
+                    count_y += 1
+            count_x += 1
+            count_y = -2
+    if icanseeyou == 1:
+        count_x = 0
+        count_y = 0
+        for i in range(36):
+            for j in range(64):
+                if count_x in range(-1, BOARD_HEIGHT) and count_y in range(-1, BOARD_WIDTH):
+                    board[count_x][count_y] = floors[floor][count_x][count_y]
+                    count_y += 1
+            count_x += 1
+            count_y = 0
 
     board[x][y] = player["icon"]
+
 
 
 def check_player_position(board):
@@ -81,6 +95,7 @@ def player_movement(key, board, floors):
     global discovered_floor_2
     player_x, player_y = check_player_position(board)
 # przechodzenie pomiedzy floorami
+    cheats_module(key)
 
 #TODO: zrobić w innej funkcji
     if floor == 0 and board[3][63] == "@" and key == "d":
@@ -319,25 +334,25 @@ def monsters_movement(floors):
         random_direction = random.choice(directions)
         x, y = i
         if random_direction == "w":
-            if (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " ":
+            if (x - 1) not in range(1,35) or (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " ":
                 continue
             else:
                 (floors[floor])[x - 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "s":
-            if (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " ":
+            if (x + 1) not in range(1,35) or (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " ":
                 continue
             else:
                 (floors[floor])[x + 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "a":
-            if (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " ":
+            if (y - 1) not in range(1,63) or (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " ":
                 continue
             else:
                 (floors[floor])[x][y - 1] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "d":
-            if (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " ":
+            if (y + 1) not in range(1,63) or (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " ":
                 continue
             else:
                 (floors[floor])[x][y + 1] = "M"
@@ -357,3 +372,25 @@ def check_monster_position(floors):
                 temp = x, y
                 monsters_xy_list.append(temp)
     return monsters_xy_list
+
+
+"""
+parameters: key
+modyfikuje statystyki i zmienia zmiennia globalna icanseeyou
+no return
+"""
+def cheats_module(key):
+    global icanseeyou
+    if key == "h":
+        user_input = input(">")
+        if user_input == "spameggs":
+            main.health += 10
+            main.attack += 10
+            main.armour += 10
+            main.total_health += 10
+        if user_input == "icanseeyou" and icanseeyou == 0:
+            icanseeyou = 1
+        elif user_input == "icanseeyou" and icanseeyou == 1:
+            icanseeyou = 0
+
+

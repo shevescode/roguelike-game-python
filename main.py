@@ -11,7 +11,6 @@ armour = 10
 health = 100
 total_health = 150
 inventory = ["YOUR INVENTORY: "]
-
 BOARD_WIDTH = 64
 BOARD_HEIGHT = 36
 
@@ -55,7 +54,6 @@ def main():
             floors = engine.monsters_movement(floors)
             show_inventory = 0
         util.clear_screen()
-        print(show_inventory)
 
 
 if __name__ == '__main__':
