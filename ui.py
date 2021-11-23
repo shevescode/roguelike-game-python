@@ -45,4 +45,9 @@ def display_board(board, inv):
 def display_stats():
     print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOUR: {main.armour}")
 
+def display_message(message):
+    print(message)
 
+def get_user_input(message):
+    user_input = input(message)
+    return user_input

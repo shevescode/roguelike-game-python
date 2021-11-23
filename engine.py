@@ -394,3 +394,12 @@ def cheats_module(key):
             icanseeyou = 0
 
 
+user_race = {
+    1: {"name": "Elf", "hp": 80, "armor": 8, "attack": 12, "ability": None},
+    2: {"name": "Human", "hp": 100, "armor": 10, "attack": 10, "ability": None},
+    3: {"name": "Dwarf", "hp": 120, "armor": 12, "attack": 8, "ability": None},
+    4: {"name": "Orc", "hp": 120, "armor": 12, "attack": 12, "ability": "low_drop"},
+    5: {"name": "Rouge", "hp": 80, "armor": 12, "attack": 8, "ability": "keys"},
+    6: {"name": "Pumpkin", "hp": 10, "armor": 5, "attack": 20, "ability": "high_vis"},
+    7: {"name": "Own", "hp": "?", "armor": "?", "attack": "?", "ability": None}
+    }
