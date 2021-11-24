@@ -281,6 +281,10 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
+boss = {
+    {"type": "boss", "hp": 2000, "attack": 50, "deffence": 50}
+}
+
 #LISTS TO RANDOM CHOICE
 item_list = [eq_items]
 artifact_ability_list = ["attack points", "deffence points"]
@@ -311,6 +315,47 @@ def place_items(floor):
             floor[i[0]][i[1]] = "M"
         count += 1
 
+def place_boss(floor_3):
+    '''
+    Creates a new game board based on input parameters.
+
+    Args:
+    int: The width of the board
+    int: The height of the board
+
+    Returns:
+    list: Game board
+    '''
+    count_x = -2
+    count_y = -2
+    x, y = 26, 33
+    for i in range(5):
+        for j in range(5):
+            if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
+                floor_3[x + count_x][y + count_y] = "B"
+                count_y += 1
+        count_x += 1
+        count_y = -2
+
+def get_boss_coordinates(floor_3):
+    '''
+    Creates a new game board based on input parameters.
+
+    Args:
+    int: The width of the board
+    int: The height of the board
+
+    Returns:
+    list: Game board
+    '''
+    boss_coordinates = []
+    for x, i in enumerate(floor_3):
+        for y, j in enumerate(i):
+            if j == "B":
+                temp = x, y
+                boss_coordinates.append(temp)
+
+    return boss_coordinates
 
 # wywolane 1 raz w main na początku gry, ustawia przedmioty na 3 poziomach
 def prepare_floors():
@@ -320,6 +365,7 @@ def prepare_floors():
     place_items(floor_1)
     place_items(floor_2)
     place_items(floor_3)
+    place_boss(floor_3)
     return floor_1, floor_2, floor_3
 
 """
@@ -327,36 +373,102 @@ parameters: floors
 potwory poruszaja sie po mapie nawet ktorej nie widac
 return: floors
 """
+
+
 def monsters_movement(floors):
+    '''
+    Creates a new game board based on input parameters.
+
+    Args:
+    int: The width of the board
+    int: The height of the board
+
+    Returns:
+    list: Game board
+    '''
     monsters_xy_list = check_monster_position(floors)
     directions = ["w", "s", "a", "d"]
     for i in monsters_xy_list:
         random_direction = random.choice(directions)
         x, y = i
         if random_direction == "w":
-            if (x - 1) not in range(1,35) or (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " ":
+            if (x - 1) not in range(1, 35) or (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " " or (floors[floor])[x - 1][y] == "B" or (floors[floor])[x - 1][y] == "$":
                 continue
             else:
                 (floors[floor])[x - 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "s":
-            if (x + 1) not in range(1,35) or (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " ":
+            if (x + 1) not in range(1, 35) or (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " " or (floors[floor])[x + 1][y] == "B" or (floors[floor])[x + 1][y] == "$":
                 continue
             else:
                 (floors[floor])[x + 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "a":
-            if (y - 1) not in range(1,63) or (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " ":
+            if (y - 1) not in range(1, 63) or (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " " or (floors[floor])[x][y - 1] == "B" or (floors[floor])[x][y - 1] == "$":
                 continue
             else:
                 (floors[floor])[x][y - 1] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "d":
-            if (y + 1) not in range(1,63) or (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " ":
+            if (y + 1) not in range(1, 63) or (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " " or (floors[floor])[x][y + 1] == "B" or (floors[floor])[x][y + 1] == "$":
                 continue
             else:
                 (floors[floor])[x][y + 1] = "M"
                 (floors[floor])[x][y] = "."
+    return floors
+
+def boss_movement(floors):
+    '''
+    Creates a new game board based on input parameters.
+
+    Args:
+    int: The width of the board
+    int: The height of the board
+
+    Returns:
+    list: Game board
+    '''
+    boss_xy_list = get_boss_coordinates(floors[2])
+    directions = ["w", "s", "a", "d"]
+    random_direction = random.choice(directions)
+    for i in boss_xy_list:
+        if random_direction == "w":
+            for index, value in enumerate(boss_xy_list):
+                if index >= 20:
+                    x, y = value
+                    if not (x - 5) in range(1, 35) or (floors[2])[x - 5][y] == "#" or (floors[2])[x - 5][y] == " " or (floors[2])[x - 5][y] == "$":
+                        continue
+                    else:
+                        (floors[2])[x][y] = "."
+                        (floors[2])[x - 5][y] = "B"
+
+        elif random_direction == "s":
+            for index, value in enumerate(boss_xy_list):
+                if index <= 4:
+                    x, y = value
+                    if not (x + 5) in range(1, 35) or (floors[2])[x + 5][y] == "#" or (floors[2])[x + 5][y] == " " or (floors[2])[x + 5][y] == "$":
+                        continue
+                    else:
+                        (floors[2])[x][y] = "."
+                        (floors[2])[x + 5][y] = "B"
+        elif random_direction == "a":
+            for index, value in enumerate(boss_xy_list):
+                if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
+                    x, y = value
+                    if not (y - 5) in range(1, 64) or (floors[2])[x][y - 5] == "#" or (floors[2])[x][y - 5] == " " or (floors[2])[x][y - 5] == "$":
+                        continue
+                    else:
+                        (floors[2])[x][y] = "."
+                        (floors[2])[x][y - 5] = "B"
+        elif random_direction == "d":
+            for index, value in enumerate(boss_xy_list):
+                if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
+                    x, y = value
+                    if not (y - 5) in range(1, 64) or (floors[2])[x][y + 5] == "#" or (floors[2])[x][y + 5] == " " or (floors[2])[x][y + 5] == "$":
+                        continue
+                    else:
+                        (floors[2])[x][y] = "."
+                        (floors[2])[x][y + 5] = "B"
     return floors
 
 """

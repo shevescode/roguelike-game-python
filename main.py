@@ -52,6 +52,7 @@ def main():
         else:
             board = engine.player_movement(key, board, floors)
             floors = engine.monsters_movement(floors)
+            floors = engine.boss_movement(floors)
             show_inventory = 0
         util.clear_screen()
 
