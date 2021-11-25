@@ -2,7 +2,7 @@ from main import BOARD_HEIGHT, BOARD_WIDTH
 import main
 import random
 import os
-floor = 0
+floor = 2
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
@@ -52,17 +52,18 @@ def put_player_on_board(board, player, floors):
 
     # current_floor = read_board(change_floor())
     remove_monsters_from_eyeshot(board)
+    remove_boss_from_eyeshot(board)
 
     if icanseeyou == 0:
-        count_x = -2
-        count_y = -2
-        for i in range(5):
-            for j in range(5):
+        count_x = -3
+        count_y = -3
+        for i in range(7):
+            for j in range(7):
                 if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
                     board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
                     count_y += 1
             count_x += 1
-            count_y = -2
+            count_y = -3
     if icanseeyou == 1:
         count_x = 0
         count_y = 0
@@ -131,22 +132,23 @@ def player_movement(key, board, floors):
 
 # znaleznienie itemu przez gracza
     player_stand_on_item(player_x, player_y, key, board, floors)
-    # fight_with_boss(key, board, player_x, player_y)
+    if contact_with_boss(key, board, player_x, player_y) == True:
+        return board
 # ruch gracza
     if key == "w":
-        if not board[player_x - 1][player_y] == "#":
+        if not board[player_x - 1][player_y] == "o":
             board[player_x - 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "s":
-        if not board[player_x + 1][player_y] == "#":
+        if not board[player_x + 1][player_y] == "o":
             board[player_x + 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "a":
-        if not board[player_x][player_y - 1] == "#":
+        if not board[player_x][player_y - 1] == "o":
             board[player_x][player_y - 1] = "@"
             board[player_x][player_y] = "."
     elif key == "d":
-        if not board[player_x][player_y + 1] == "#":
+        if not board[player_x][player_y + 1] == "o":
             board[player_x][player_y + 1] = "@"
             board[player_x][player_y] = "."
 
@@ -156,6 +158,14 @@ def remove_monsters_from_eyeshot(board):
     for x, i in enumerate(board):
         for y, j in enumerate(i):
             if j == "M":
+                board[x][y] = "."
+    return board
+
+
+def remove_boss_from_eyeshot(board):
+    for x, i in enumerate(board):
+        for y, j in enumerate(i):
+            if j == "B":
                 board[x][y] = "."
     return board
 
@@ -281,8 +291,8 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
-# boss = {"type": "boss", "hp": 2000, "attack": 50, "deffence": 50}
-# 
+boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25}
+
 
 #LISTS TO RANDOM CHOICE
 item_list = [eq_items]
@@ -413,7 +423,7 @@ def monsters_movement(floors):
     return floors
 
 
-def boss_movement(floors):
+def boss_movement(floors, board):
     '''
     Randomly choosing coordinates for making random boss movement, overwrite floor_3
 
@@ -426,60 +436,137 @@ def boss_movement(floors):
     boss_xy_list = get_boss_coordinates(floors[2])
     directions = ["w", "s", "a", "d"]
     random_direction = random.choice(directions)
-    for i in boss_xy_list:
-        if random_direction == "w":
-            for index, value in enumerate(boss_xy_list):
-                if index >= 20:
-                    x, y = value
-                    if not (x - 5) in range(1, 35) or (floors[2])[x - 5][y] == "#" or (floors[2])[x - 5][y] == " " or (floors[2])[x - 5][y] == "$":
-                        continue
-                    else:
+    if random_direction == "w":
+        for index, value in enumerate(boss_xy_list):
+            if index >= 20:
+                x, y = value
+                if not (x - 5) in range(1, 35) or (floors[2])[x - 5][y] == "#" or (floors[2])[x - 5][y] == " " or (floors[2])[x - 5][y] == "$":
+                    continue
+                else:
+                    if player_in_boss_range(floors, board, random_direction) == True:
                         (floors[2])[x][y] = "."
                         (floors[2])[x - 5][y] = "B"
-
-        elif random_direction == "s":
-            for index, value in enumerate(boss_xy_list):
-                if index <= 4:
-                    x, y = value
-                    if not (x + 5) in range(1, 35) or (floors[2])[x + 5][y] == "#" or (floors[2])[x + 5][y] == " " or (floors[2])[x + 5][y] == "$":
-                        continue
                     else:
+                        return floors
+    elif random_direction == "s":
+        for index, value in enumerate(boss_xy_list):
+            if index <= 4:
+                x, y = value
+                if not (x + 5) in range(1, 35) or (floors[2])[x + 5][y] == "#" or (floors[2])[x + 5][y] == " " or (floors[2])[x + 5][y] == "$":
+                    continue
+                else:
+                    if player_in_boss_range(floors, board, random_direction) == True:
                         (floors[2])[x][y] = "."
                         (floors[2])[x + 5][y] = "B"
-        elif random_direction == "a":
-            for index, value in enumerate(boss_xy_list):
-                if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
-                    x, y = value
-                    if not (y - 5) in range(1, 64) or (floors[2])[x][y - 5] == "#" or (floors[2])[x][y - 5] == " " or (floors[2])[x][y - 5] == "$":
-                        continue
                     else:
+                        return floors
+    elif random_direction == "a":
+        for index, value in enumerate(boss_xy_list):
+            if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
+                x, y = value
+                if not (y - 5) in range(1, 64) or (floors[2])[x][y - 5] == "#" or (floors[2])[x][y - 5] == " " or (floors[2])[x][y - 5] == "$":
+                    continue
+                else:
+                    if player_in_boss_range(floors, board, random_direction) == True:
                         (floors[2])[x][y] = "."
                         (floors[2])[x][y - 5] = "B"
-        elif random_direction == "d":
-            for index, value in enumerate(boss_xy_list):
-                if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
-                    x, y = value
-                    if not (y - 5) in range(1, 64) or (floors[2])[x][y + 5] == "#" or (floors[2])[x][y + 5] == " " or (floors[2])[x][y + 5] == "$":
-                        continue
                     else:
+                        return floors
+    elif random_direction == "d":
+        for index, value in enumerate(boss_xy_list):
+            if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
+                x, y = value
+                if not (y - 5) in range(1, 64) or (floors[2])[x][y + 5] == "#" or (floors[2])[x][y + 5] == " " or (floors[2])[x][y + 5] == "$":
+                    continue
+                else:
+                    if player_in_boss_range(floors, board, random_direction) == True:
                         (floors[2])[x][y] = "."
                         (floors[2])[x][y + 5] = "B"
+                    else:
+                        return floors
     return floors
 
-# def fight_with_boss(key,board, player_x, player_y):
-#     if key == "w":
-#         if board[player_x - 1][player_y] == "B":
-#             print("Hello")
-#     if key == "s":
-#         if board[player_x + 1][player_y] == "B":
-#             print("Hello")
-#             pass
-#     if key == "a":
-#         if (floors[floor])[x][y - 1] == "B":
-#             pass
-#     if key == "d":
-#         if (floors[floor])[x][y + 1] == "B":
-#             pass
+
+def player_in_boss_range(floors, board, direction):
+    boss_xy_list = get_boss_coordinates(floors[2])
+    if direction == "w":
+        for index, value in enumerate(boss_xy_list):
+            if index >= 20:
+                x, y = value
+                if board[x - 5][y] == "@":
+                    return False
+            return True
+    elif direction == "s":
+        for index, value in enumerate(boss_xy_list):
+            if index <= 4:
+                x, y = value
+                if board[x + 5][y] == "@":
+                    return False
+            return True
+    elif direction == "a":
+        for index, value in enumerate(boss_xy_list):
+            if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
+                x, y = value
+                if board[x][y - 5] == "@":
+                    return False
+            return True
+    elif direction == "d":
+        for index, value in enumerate(boss_xy_list):
+            if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
+                x, y = value
+                if board[x][y + 5] == "@":
+                    return False
+            return True
+    # # for index, value in enumerate(boss_xy_list):
+    # #     x,y = value
+    # #     if direction == "w" and index >= 20:
+    # #         if board[x - 5][y] == "@":
+    # #             return False
+    # #         return True
+    #     if direction == "s" and index <= 5:
+    #         if board[x + 5][y] == "@":
+    #             return False
+    #         return True
+    #     if direction == "a" and (index == 4 or index == 9 or index == 14 or index == 19 or index == 24):
+    #         if board[x][y - 5] == "@":
+    #             return False
+    #         return True
+    #     if direction == "d" and (index == 0 or index == 5 or index == 10 or index == 15 or index == 20):
+    #         if board[x][y + 5] == "@":
+    #             return False
+    #         return True
+        
+
+def contact_with_boss(key,board, player_x, player_y):
+    if key == "w":
+        if board[player_x - 1][player_y] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "s":
+        if board[player_x + 1][player_y] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "a":
+        if board[player_x][player_y - 1] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "d":
+        if board[player_x][player_y - 1] == "B":
+            fight_with_boss()
+            return True
+
+        return False
+
+def fight_with_boss():
+    boss["hp"] -= main.attack
+    main.health -= boss["attack"]
+    if boss["hp"] <= 0:
+        print("You won!")
+        os.system("pause")
+        quit()
 """
 parameters: floors
 zbiera liste koordynatow potworow
