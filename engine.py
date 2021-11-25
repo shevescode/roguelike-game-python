@@ -501,16 +501,13 @@ monsters_list = {
     4: {"type": "monster", "name": "warrior", "activity": "fight", "hp": 35},
 }
 
-#LISTS to radnom monster and random npc
-monster_list = ([monsters_list])
-
 def monster_choose():
     """ chooses random monster from the provided dictionary """
     monster = random.choice(list(monsters_list))
-    print(monster)
     return monster
 
 def monster_strength(monster):
+    monster = monster_choose()
     """ implement hit and miss for each monster depending on their attack strength
         returns hit and attack points
      """
@@ -520,21 +517,25 @@ def monster_strength(monster):
         hit = "missed"
         print(f"Your opponent {hit}. Your hp level didn't change")
     if monsters_list[monster]["name"] == "rat":
+        x = monsters_list[monster]["name"]
         attack = random.randrange(1, 4)
         main.health -= attack
-        print(f"You got bitten by a rat. Your hp is lowered by {attack} points.")
+        print(f"You got bitten by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "skeleton":
+        x = monsters_list[monster]["name"]
         attack = random.randrange(5, 8)
         main.health -= attack
-        print(f"You got scratched by a skeleton. Your hp is lowered by {attack} points.")
+        print(f"You got scratched by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "archer":
+        x = monsters_list[monster]["name"]
         attack = random.randrange(9, 12)
         main.health -= attack
-        print(f"You got shot by a archer. Your hp is lowered by {attack} points.")
+        print(f"You got shot by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "warrior":
+        x = monsters_list[monster]["name"]
         attack = random.randrange(13, 15)
         main.health -= attack
-        print(f"You got hit by a warrior. Your hp is lowered by {attack} points.")
+        print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
 
 
 monster_strength(monster=True)
