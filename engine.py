@@ -131,7 +131,7 @@ def player_movement(key, board, floors):
 
 # znaleznienie itemu przez gracza
     player_stand_on_item(player_x, player_y, key, board, floors)
-
+    # fight_with_boss(key, board, player_x, player_y)
 # ruch gracza
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
@@ -281,9 +281,8 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
-boss = {
-    {"type": "boss", "hp": 2000, "attack": 50, "deffence": 50}
-}
+# boss = {"type": "boss", "hp": 2000, "attack": 50, "deffence": 50}
+# 
 
 #LISTS TO RANDOM CHOICE
 item_list = [eq_items]
@@ -317,14 +316,11 @@ def place_items(floor):
 
 def place_boss(floor_3):
     '''
-    Creates a new game board based on input parameters.
+    Placing "B" letters on floor_3 immitating boss .
 
     Args:
-    int: The width of the board
-    int: The height of the board
+    floor_3
 
-    Returns:
-    list: Game board
     '''
     count_x = -2
     count_y = -2
@@ -337,16 +333,15 @@ def place_boss(floor_3):
         count_x += 1
         count_y = -2
 
+
 def get_boss_coordinates(floor_3):
     '''
-    Creates a new game board based on input parameters.
-
+    Getting list with coordinates which ale places where letter "B" is standing on floor_3
     Args:
-    int: The width of the board
-    int: The height of the board
+    floor_3
 
     Returns:
-    list: Game board
+    list: boss_coordinates
     '''
     boss_coordinates = []
     for x, i in enumerate(floor_3):
@@ -417,16 +412,16 @@ def monsters_movement(floors):
                 (floors[floor])[x][y] = "."
     return floors
 
+
 def boss_movement(floors):
     '''
-    Creates a new game board based on input parameters.
+    Randomly choosing coordinates for making random boss movement, overwrite floor_3
 
     Args:
-    int: The width of the board
-    int: The height of the board
+    floors -> floor_3
 
     Returns:
-    list: Game board
+    floors
     '''
     boss_xy_list = get_boss_coordinates(floors[2])
     directions = ["w", "s", "a", "d"]
@@ -471,12 +466,27 @@ def boss_movement(floors):
                         (floors[2])[x][y + 5] = "B"
     return floors
 
+# def fight_with_boss(key,board, player_x, player_y):
+#     if key == "w":
+#         if board[player_x - 1][player_y] == "B":
+#             print("Hello")
+#     if key == "s":
+#         if board[player_x + 1][player_y] == "B":
+#             print("Hello")
+#             pass
+#     if key == "a":
+#         if (floors[floor])[x][y - 1] == "B":
+#             pass
+#     if key == "d":
+#         if (floors[floor])[x][y + 1] == "B":
+#             pass
 """
 parameters: floors
 zbiera liste koordynatow potworow
 return: lista koordynatow potworow
 """
 def check_monster_position(floors):
+    
     monsters_xy_list = []
     for x, i in enumerate(floors[floor]):
         for y, j in enumerate(i):
