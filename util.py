@@ -3,7 +3,7 @@ import os
 
 attack = 10
 armour = 10
-health = 100
+health = 30
 total_health = 150
 
 def key_pressed():
@@ -18,7 +18,7 @@ def key_pressed():
             raise ImportError('getch not available')
         else:
             key = msvcrt.getch().decode('utf-8')
-            return key
+            return key.lower()
     else:
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)

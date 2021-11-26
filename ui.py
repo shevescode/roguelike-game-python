@@ -3,6 +3,7 @@
 # board = engine.create_board(30,20)
 import os
 import main
+import util 
 from util import clear_screen
 
 
@@ -25,14 +26,11 @@ def display_board(board, inv):
             print()
 
 
-def display_message(message):
-    print(message)
-
 def display_stats(health, total_health, attack, armour):
     """
     This function displays player's statistics.
     """
-    print(f"HEALTH: {health}/{total_health} ATTACK: {attack} ARMOUR: {armour}")
+    print(f"HEALTH: {util.health}/{util.total_health} ATTACK: {util.attack} ARMOUR: {util.armour}")
 
 def display_message(message):
     """
