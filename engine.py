@@ -506,7 +506,7 @@ def monster_choose():
     monster = random.choice(list(monsters_list))
     return monster
 
-def monster_strength(monster):
+def monster_attack(monster):
     monster = monster_choose()
     """ implement hit and miss for each monster depending on their attack strength
         returns hit and attack points
@@ -538,12 +538,25 @@ def monster_strength(monster):
         print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
 
 
-monster_strength(monster=True)
+monster_attack(monster=True)
 
 def player_attack_monster(player_x, player_y, key, board, floors):
-    pass
-    #implement player attack with monsters
-
+    if key == "w":
+        if board[player_x - 1][player_y] == "M":
+            (floors[floor])[player_x - 1][player_y] = "D"
+            print("dupa")
+    elif key == "s":
+        if board[player_x + 1][player_y] == "M":
+            (floors[floor])[player_x + 1][player_y] = "D"
+            print("dupa")
+    elif key == "a":
+        if board[player_x][player_y - 1] == "M":
+            (floors[floor])[player_x][player_y - 1] = "D"
+            print("dupa")
+    elif key == "d":
+        if board[player_x][player_y + 1] == "M":
+            (floors[floor])[player_x][player_y + 1] = "D"
+            print("dupa")
 
 """
 parameters: key
