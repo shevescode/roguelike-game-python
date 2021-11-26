@@ -140,19 +140,19 @@ def player_movement(key, board, floors):
         return board
 # ruch gracza
     if key == "w":
-        if not board[player_x - 1][player_y] == "o":
+        if not board[player_x - 1][player_y] == "#":
             board[player_x - 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "s":
-        if not board[player_x + 1][player_y] == "o":
+        if not board[player_x + 1][player_y] == "#":
             board[player_x + 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "a":
-        if not board[player_x][player_y - 1] == "o":
+        if not board[player_x][player_y - 1] == "#":
             board[player_x][player_y - 1] = "@"
             board[player_x][player_y] = "."
     elif key == "d":
-        if not board[player_x][player_y + 1] == "o":
+        if not board[player_x][player_y + 1] == "#":
             board[player_x][player_y + 1] = "@"
             board[player_x][player_y] = "."
 
@@ -251,12 +251,13 @@ def drew_item_informations(number, adjective, select_dict, item, ability):
         elif eq_items[item]['name'] == "artifact":
             print(
                 f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
-            if ability == "deffence points":
+            if ability == "defence points":
                 util.armour += number
-                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa obrony 
+                main.inventory.append(f"The fucking horn of defense + {number}")
             else:
                 util.attack += number
-                # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa ataku
+                main.inventory.append(
+                    f"The fucking horn of attack + {number}")
         elif eq_items[item]['name'] == "key":
             print(
                 f"You've found an {eq_items[item]['name']}! It was added to your inventory.")
@@ -277,7 +278,9 @@ def read_board(floor):
 
     return list
 
-#ITEM DICTIONARIES
+'''
+Items on board dictionaries: eq_items, items_food, boos
+'''
 items_food = {
     1: {"type": "food", "name": "an apple", "hp": 1, "function": "health point."},
     2: {"type": "food", "name": "a bread", "hp": 2, "function": "health points."},
@@ -286,23 +289,23 @@ items_food = {
     5: {"type": "food", "name": "a sweet roll", "hp": 5, "function": "health points."},
     6: {"type": "food", "name": "a chicken", "hp": 6, "function": "health points."},
 }
+
 eq_items = {
     1: {"type": "inv", "name": "sword", "function": "attack points"},
-    2: {"type": "inv", "name": "shield", "function": "deffence points"},
-    3: {"type": "inv", "name": "armour", "function": "deffence points"},
+    2: {"type": "inv", "name": "shield", "function": "defence points"},
+    3: {"type": "inv", "name": "armour", "function": "defence points"},
     4: {"type": "inv", "name": "key", "function": "possibilities", "open": 1},
     5: {"type": "inv", "name": "helmet", "function": "total healt points"},
-    6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
+    6: {"type": "inv", "name": "artifact", "function": "defence", "att": 20},
 }
 
-
-boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25, "feature": "invincible"}
-
+boss = {"type": "boss", "hp": 200, "attack": 30, "defence": 30, "feature": "invincible"}
 
 
-#LISTS TO RANDOM CHOICE
-item_list = [eq_items]
-artifact_ability_list = ["attack points", "deffence points"]
+
+'''List for random choice the item on map/ list for random choice the artifact feature'''
+item_list = [eq_items, items_food]
+artifact_ability_list = ["attack points", "defence points"]
 
 
 def find_empty_space(floor):
@@ -317,6 +320,8 @@ def find_empty_space(floor):
 
 
 def place_items(floor):
+    '''
+    Placing items "X"/moobs "M" on the board'''
     list_of_coordinates = find_empty_space(floor)
     selected_coordinates = []
     for i in range(20):
@@ -480,19 +485,6 @@ def boss_movement(floors, board):
                     (floors[2])[x][y + 5] = "B"
     return floors
 
-# def player_in_range(floors, board):
-#     boss_xy_list = get_boss_coordinates(floors[2])
-#     for i in boss_xy_list:
-#         x, y = i
-#         if board[x - 1][y] == "@":
-#             return False
-#         if board[x + 1][y] == "@":
-#             return False
-#         if board[x][y - 1] == "@":
-#             return False
-#         if board[x][y + 1] == "@":
-#             return False
-
 def player_in_boss_range(floors, board, direction):
     boss_xy_list = get_boss_coordinates(floors[2])
     if direction == "w":
@@ -525,6 +517,11 @@ def player_in_boss_range(floors, board, direction):
         return True
 
 def contact_with_boss(key,board, player_x, player_y):
+    '''
+    parameters: key, board, player_x, player_y
+    Checking if boss is opposite to us, if yes -> invoke fight_with_boss()
+    return: Boolean value
+    '''
     if key == "w":
         if board[player_x - 1][player_y] == "B":
             fight_with_boss()
@@ -547,42 +544,69 @@ def contact_with_boss(key,board, player_x, player_y):
 
         return False
 
+
+def play_again():
+    '''
+    parameter: -
+    Asking player for playing again or quit.
+    returns: -
+    '''
+    ui.display_message("""Would you like to play again?"
+
+    1. Yes
+
+    2. No
+    """)
+    while True:
+        again = input().strip()
+        if again == "":
+            continue
+        if again == "1":
+            main.main()
+        if again == "2":
+            ui.display_message(f"\nGoodbye! See you next time!\n")
+            quit()
+        else:
+            print("\nInvalid input! Try again!\n")
+            continue
+
+
 def fight_with_boss():
+    """
+    parameters: -
+    Function displays to user actuall stats during fighting with BOSS, ending the game when player or boss have 0 hp.
+    return: -
+    """
     boss["hp"] -= util.attack
     util.health -= boss["attack"]
-    if util.health >= boss["attack"]:
-        ui.display_message(
-            f"You have been attacked by {boss['feature']} {boss['type']}! \nThe {boss['type']} attacked you with {boss['attack']} attack points.")
-        time.sleep(2)
-        ui.display_message(
-            f"You have left {util.health} health points.")
+    if util.health >= boss["attack"] and boss["hp"] > 0:
+        ui.display_message(f"""You have been attacked by {boss['feature']} {boss['type']}!
+The {boss['type']} attacked you with {boss['attack']} attack points.
+You have left {util.health} health points.""")
         time.sleep(2)
 
-    elif 0 < util.health <= boss['attack']:
-        ui.display_message(
-            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
-        # util.health = 0
+    elif 0 < util.health <= boss['attack'] and boss["hp"] > 0:
+        ui.display_message(f"""You have been attacked by {boss['feature']} {boss['type']}!
+The {boss['type']} attacked you with {boss['attack']} attack points.
+You have left {util.health} health points.""")
         time.sleep(2)
+
     elif util.health <= 0:
-        # ui.display_message("XDXDXDXDXDXD")
         util.health = 0
-        ui.display_message(
-            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
+        ui.display_message(f"""You have been attacked by {boss['feature']} {boss['type']}!
+The {boss['type']} attacked you with {boss['attack']} attack points. \nYou have left {util.health} health points.
+You were defeated by the {boss['feature']} {boss['type']} :(.""")
         time.sleep(2)
-        ui.display_message(
-            f"You were defeated by the {boss['feature']} {boss['type']} :(.")
-        time.sleep(1)
-        quit()
-        # dodać tutaj wywołanie funkcji która będzie nam pytać czy grasz dalej czy nie
+        print()
+        play_again()
 
-        # elif boss["hp"] <= 0:
-        #     ui.display_message(f"The {boss['feature']} {boss['type']} has been defeated! You have won the game!")
-        #     time.sleep(1)
-"""
-parameters: floors
-zbiera liste koordynatow potworow
-return: lista koordynatow potworow
-"""
+    elif boss['hp'] <= 0:
+        boss['hp'] = 0
+        ui.display_message(f"The {boss['feature']} {boss['type']} was defeated! You have won the game. \nCongratulations! :)")
+        time.sleep(2)
+        print()
+        play_again()
+
 def check_monster_position(floors):
     """
     parameters: floors
@@ -706,3 +730,4 @@ def implement_user_choosen_race_option(user_input):
             return user_race[3]
     else:
         return False
+

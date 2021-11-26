@@ -32,7 +32,6 @@ def user_personalisation():
     This function changes basic user statistics (hp, attack, armour) according to user preference.
     """
     chosen_option = engine.implement_user_choosen_race_option(ui.personalisation_menu())
-    print(util.attack, util.armour, util.health)
     if chosen_option:
         util.health = chosen_option["hp"]
         util.armour = chosen_option["armor"]
