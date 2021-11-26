@@ -2,12 +2,14 @@ from main import BOARD_HEIGHT, BOARD_WIDTH
 import main
 import random
 import os
+import util
 floor = 0
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
 icanseeyou = 0
 # board is based on rows / height = rows / width = elements in row
+
 
 def create_board(width, height):
     '''
@@ -217,7 +219,7 @@ def drew_item_informations(number, adjective, select_dict, item, ability):
     if select_dict == items_food:
         print(
             f"You found {items_food[item]['name']}. It recovers you {items_food[item]['hp']} {items_food[item]['function']}")
-        main.health += items_food[item]['hp']
+        util.health += items_food[item]['hp']
 
     if select_dict == eq_items:
         if eq_items[item]['name'] != "key" and eq_items[item]['name'] != "artifact":
@@ -227,21 +229,21 @@ def drew_item_informations(number, adjective, select_dict, item, ability):
                 f"{adjective}{eq_items[item]['name']} - {eq_items[item]['function']} + {number}.")
 #FIXME: zapisać printy do UI
             if eq_items[item]['name'] == "sword":
-                main.attack += number
+                util.attack += number
             if eq_items[item]['name'] == "shield":
-                main.armour += number
+                util.armour += number
             if eq_items[item]['name'] == "armour":
-                main.armour += number
+                util.armour += number
             if eq_items[item]['name'] == "helmet":
-                main.total_health += number
+                util.total_health += number
         elif eq_items[item]['name'] == "artifact":
             print(
                 f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
             if ability == "deffence points":
-                main.armour += number
+                util.armour += number
                 # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa obrony 
             else:
-                main.attack += number
+                util.attack += number
                 # main.inventory.append(f"{eq_items[item]['name']} + {number}") #DO USTALENIA - róg kurwa ataku
         elif eq_items[item]['name'] == "key":
             print(
@@ -384,10 +386,10 @@ def cheats_module(key):
     if key == "h":
         user_input = input(">")
         if user_input == "spameggs":
-            main.health += 10
-            main.attack += 10
-            main.armour += 10
-            main.total_health += 10
+            util.health += 10
+            util.attack += 10
+            util.armour += 10
+            util.total_health += 10
         if user_input == "icanseeyou" and icanseeyou == 0:
             icanseeyou = 1
         elif user_input == "icanseeyou" and icanseeyou == 1:
@@ -403,3 +405,14 @@ user_race = {
     6: {"name": "Pumpkin", "hp": 10, "armor": 5, "attack": 20, "ability": "high_vis"},
     7: {"name": "Own", "hp": "?", "armor": "?", "attack": "?", "ability": None}
     }
+
+def implement_user_choosen_race_option(user_input):
+    if user_input in range(4):
+        if user_input == 1:
+            return user_race[1]
+        if user_input == 2:
+            return user_race[2]
+        if user_input == 3:
+            return user_race[3]
+    else:
+        return False

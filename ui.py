@@ -3,6 +3,8 @@
 # board = engine.create_board(30,20)
 import os
 import main
+from util import clear_screen
+
 
 def display_board(board, inv):
     '''
@@ -42,12 +44,36 @@ def display_board(board, inv):
 #     os.system("pause")
 
 
-def display_stats():
-    print(f"HEALTH: {main.health}/{main.total_health} ATTACK: {main.attack} ARMOUR: {main.armour}")
+def display_stats(health, total_health, attack, armour):
+    print(f"HEALTH: {health}/{total_health} ATTACK: {attack} ARMOUR: {armour}")
 
 def display_message(message):
     print(message)
 
-def get_user_input(message):
-    user_input = input(message)
-    return user_input
+def get_user_numeric_input(message):
+    while True:
+        try:
+            user_input = int(input(message))
+            return user_input
+        except ValueError:
+            return False
+
+
+def personalisation_menu():
+    clear_screen()
+    display_message("""Before the game begins, decide who do you want to play as.
+
+Your options are:
+    1. Elf (low HP, low defence, high attack)
+    2. Human (medium HP, medium defence, medium attack)
+    3. Dwarf (high HP, high defence, low attack)
+    """)
+    return get_user_numeric_input("Enter 1, 2 or 3 to choose: ")
+
+def get_user_name():
+    clear_screen()
+    display_message("Now, all significant matter has its name. What is yours?\n")
+    name = input("Enter your name: ")
+    if name.strip() == "":
+        name = "stranger"
+    return name
