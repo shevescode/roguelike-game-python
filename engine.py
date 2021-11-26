@@ -5,11 +5,11 @@ import os
 import ui
 import time
 import util
-floor = 2
+floor = 0
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
-icanseeyou = 1
+icanseeyou = 0
 # board is based on rows / height = rows / width = elements in row
 
 
@@ -138,6 +138,7 @@ def player_movement(key, board, floors):
     player_stand_on_item(player_x, player_y, key, board, floors)
     if contact_with_boss(key, board, player_x, player_y) == True:
         return board
+    player_attack_monster(player_x, player_y, key, board, floors)
 # ruch gracza
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
@@ -596,10 +597,10 @@ def check_monster_position(floors):
 
 #Monsters dictionaries
 monsters_list = {
-    1: {"type": "monster", "name": "rat", "activity": "fight", "hp": 20},
-    2: {"type": "monster", "name": "skeleton", "activity": "fight", "hp": 25},
-    3: {"type": "monster", "name": "archer", "activity": "fight", "hp": 30},
-    4: {"type": "monster", "name": "warrior", "activity": "fight", "hp": 35},
+    1: {"type": "monster", "name": "rat", "activity": "fight", "hp": 50},
+    2: {"type": "monster", "name": "skeleton", "activity": "fight", "hp": 55},
+    3: {"type": "monster", "name": "archer", "activity": "fight", "hp": 60},
+    4: {"type": "monster", "name": "warrior", "activity": "fight", "hp": 60},
 }
 
 def monster_choose():
@@ -612,52 +613,81 @@ def monster_attack(monster):
     """ implement hit and miss for each monster depending on their attack strength
         returns hit and attack points
      """
-    # att_strength = random.randrange(0, 24)
     attack = random.randrange(0, 5)
     if attack == 0:
         hit = "missed"
         print(f"Your opponent {hit}. Your hp level didn't change")
     if monsters_list[monster]["name"] == "rat":
-        x = monsters_list[monster]["name"]
-        attack = random.randrange(1, 4)
-        util.health -= attack
-        print(f"You got bitten by a {x}. Your hp is lowered by {attack} points.")
+        rat_hp = monsters_list[monster]["hp"]
+        while rat_hp > 0:
+            util.health -= attack
+            attack = random.randrange(1, 4)
+            print(f"You got bitten by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {rat_hp}")
+            rat_hp -= util.attack
+            time.sleep(3)
+        if rat_hp <= 0:
+            print(f"You won the fight!")
+        if util.health <= 0:
+            print(f"You died. You are are noob.")
+        time.sleep(3)
     if monsters_list[monster]["name"] == "skeleton":
-        x = monsters_list[monster]["name"]
-        attack = random.randrange(5, 8)
-        util.health -= attack
-        print(f"You got scratched by a {x}. Your hp is lowered by {attack} points.")
+        skeleton_hp = monsters_list[monster]["hp"]
+        while skeleton_hp > 0:
+            util.health -= attack
+            attack = random.randrange(5, 8)
+            print(f"You got scratched by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {skeleton_hp}")
+            skeleton_hp -= util.attack
+            time.sleep(3)
+        if skeleton_hp <= 0:
+            print(f"You won the fight!")
+        if util.health <= 0:
+            print(f"You died. You are are noob.")
+        time.sleep(3)
     if monsters_list[monster]["name"] == "archer":
-        x = monsters_list[monster]["name"]
-        attack = random.randrange(9, 12)
-        util.health -= attack
-        print(f"You got shot by a {x}. Your hp is lowered by {attack} points.")
+        archer_hp = monsters_list[monster]["hp"]
+        while archer_hp > 0:
+            util.health -= attack
+            attack = random.randrange(9, 12)
+            print(f"You got shot by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {archer_hp}")
+            archer_hp -= util.attack
+            time.sleep(3)
+        if archer_hp <= 0:
+            print(f"You won the fight!")
+        if util.health <= 0:
+            print(f"You died. You are are noob.")
+        time.sleep(3)
     if monsters_list[monster]["name"] == "warrior":
-        x = monsters_list[monster]["name"]
-        attack = random.randrange(13, 15)
-        util.health -= attack
-        print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
+        warrior_hp = monsters_list[monster]["hp"]
+        while warrior_hp > 0:
+            util.health -= attack
+            attack = random.randrange(13, 15)
+            print(f"You got hit by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {warrior_hp}")
+            warrior_hp -= util.attack
+            time.sleep(3)
+        if warrior_hp <= 0:
+            print(f"You won the fight!")
+        if util.health <= 0:
+            print(f"You died. You are are noob.")
+        time.sleep(3)
 
-
-monster_attack(monster=True)
 
 def player_attack_monster(player_x, player_y, key, board, floors):
     if key == "w":
         if board[player_x - 1][player_y] == "M":
+            monster_attack(monster=True)
             (floors[floor])[player_x - 1][player_y] = "D"
-            print("dupa")
     elif key == "s":
         if board[player_x + 1][player_y] == "M":
+            monster_attack(monster=True)
             (floors[floor])[player_x + 1][player_y] = "D"
-            print("dupa")
     elif key == "a":
         if board[player_x][player_y - 1] == "M":
+            monster_attack(monster=True)
             (floors[floor])[player_x][player_y - 1] = "D"
-            print("dupa")
     elif key == "d":
         if board[player_x][player_y + 1] == "M":
+            monster_attack(monster=True)
             (floors[floor])[player_x][player_y + 1] = "D"
-            print("dupa")
 
 
 def cheats_module(key):
