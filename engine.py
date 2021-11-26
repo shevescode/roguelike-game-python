@@ -293,7 +293,9 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
+
 boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25, "feature": "invincible"}
+
 
 
 #LISTS TO RANDOM CHOICE
@@ -585,6 +587,70 @@ def check_monster_position(floors):
                 monsters_xy_list.append(temp)
     return monsters_xy_list
 
+#Monsters dictionaries
+monsters_list = {
+    1: {"type": "monster", "name": "rat", "activity": "fight", "hp": 20},
+    2: {"type": "monster", "name": "skeleton", "activity": "fight", "hp": 25},
+    3: {"type": "monster", "name": "archer", "activity": "fight", "hp": 30},
+    4: {"type": "monster", "name": "warrior", "activity": "fight", "hp": 35},
+}
+
+def monster_choose():
+    """ chooses random monster from the provided dictionary """
+    monster = random.choice(list(monsters_list))
+    return monster
+
+def monster_attack(monster):
+    monster = monster_choose()
+    """ implement hit and miss for each monster depending on their attack strength
+        returns hit and attack points
+     """
+    # att_strength = random.randrange(0, 24)
+    attack = random.randrange(0, 5)
+    if attack == 0:
+        hit = "missed"
+        print(f"Your opponent {hit}. Your hp level didn't change")
+    if monsters_list[monster]["name"] == "rat":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(1, 4)
+        main.health -= attack
+        print(f"You got bitten by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "skeleton":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(5, 8)
+        main.health -= attack
+        print(f"You got scratched by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "archer":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(9, 12)
+        main.health -= attack
+        print(f"You got shot by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "warrior":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(13, 15)
+        main.health -= attack
+        print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
+
+
+monster_attack(monster=True)
+
+def player_attack_monster(player_x, player_y, key, board, floors):
+    if key == "w":
+        if board[player_x - 1][player_y] == "M":
+            (floors[floor])[player_x - 1][player_y] = "D"
+            print("dupa")
+    elif key == "s":
+        if board[player_x + 1][player_y] == "M":
+            (floors[floor])[player_x + 1][player_y] = "D"
+            print("dupa")
+    elif key == "a":
+        if board[player_x][player_y - 1] == "M":
+            (floors[floor])[player_x][player_y - 1] = "D"
+            print("dupa")
+    elif key == "d":
+        if board[player_x][player_y + 1] == "M":
+            (floors[floor])[player_x][player_y + 1] = "D"
+            print("dupa")
 
 """
 parameters: key
