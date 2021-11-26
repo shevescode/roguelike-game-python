@@ -324,12 +324,13 @@ def prepare_floors():
     place_items(floor_3)
     return floor_1, floor_2, floor_3
 
-"""
-parameters: floors
-potwory poruszaja sie po mapie nawet ktorej nie widac
-return: floors
-"""
+
 def monsters_movement(floors):
+    """
+    parameters: floors
+    potwory poruszaja sie po mapie nawet ktorej nie widac
+    return: floors
+    """
     monsters_xy_list = check_monster_position(floors)
     directions = ["w", "s", "a", "d"]
     for i in monsters_xy_list:
@@ -361,12 +362,13 @@ def monsters_movement(floors):
                 (floors[floor])[x][y] = "."
     return floors
 
-"""
-parameters: floors
-zbiera liste koordynatow potworow
-return: lista koordynatow potworow
-"""
+
 def check_monster_position(floors):
+    """
+    parameters: floors
+    zbiera liste koordynatow potworow
+    return: lista koordynatow potworow
+    """
     monsters_xy_list = []
     for x, i in enumerate(floors[floor]):
         for y, j in enumerate(i):
@@ -376,12 +378,13 @@ def check_monster_position(floors):
     return monsters_xy_list
 
 
-"""
-parameters: key
-modyfikuje statystyki i zmienia zmiennia globalna icanseeyou
-no return
-"""
+
 def cheats_module(key):
+    """
+    parameters: key
+    modyfikuje statystyki i zmienia zmiennia globalna icanseeyou
+    no return
+    """
     global icanseeyou
     if key == "h":
         user_input = input(">")
@@ -407,6 +410,9 @@ user_race = {
     }
 
 def implement_user_choosen_race_option(user_input):
+    """
+    This function connects user input with dictionary user_race and returns its chosen element.
+    """
     if user_input in range(4):
         if user_input == 1:
             return user_race[1]
