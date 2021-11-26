@@ -140,19 +140,19 @@ def player_movement(key, board, floors):
         return board
 # ruch gracza
     if key == "w":
-        if not board[player_x - 1][player_y] == "#":
+        if not board[player_x - 1][player_y] == "o":
             board[player_x - 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "s":
-        if not board[player_x + 1][player_y] == "#":
+        if not board[player_x + 1][player_y] == "o":
             board[player_x + 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "a":
-        if not board[player_x][player_y - 1] == "#":
+        if not board[player_x][player_y - 1] == "o":
             board[player_x][player_y - 1] = "@"
             board[player_x][player_y] = "."
     elif key == "d":
-        if not board[player_x][player_y + 1] == "#":
+        if not board[player_x][player_y + 1] == "o":
             board[player_x][player_y + 1] = "@"
             board[player_x][player_y] = "."
 
@@ -561,8 +561,11 @@ def fight_with_boss():
     elif 0 < util.health <= boss['attack']:
         ui.display_message(
             f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
-
-    elif util.health == 0:
+        # util.health = 0
+        time.sleep(2)
+    elif util.health <= 0:
+        # ui.display_message("XDXDXDXDXDXD")
+        util.health = 0
         ui.display_message(
             f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
         time.sleep(2)
@@ -571,7 +574,7 @@ def fight_with_boss():
         time.sleep(1)
         quit()
         # dodać tutaj wywołanie funkcji która będzie nam pytać czy grasz dalej czy nie
-        quit()
+
         # elif boss["hp"] <= 0:
         #     ui.display_message(f"The {boss['feature']} {boss['type']} has been defeated! You have won the game!")
         #     time.sleep(1)
