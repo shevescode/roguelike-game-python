@@ -2,14 +2,10 @@ from main import BOARD_HEIGHT, BOARD_WIDTH
 import main
 import random
 import os
-<<<<<<< HEAD
-import util
-floor = 0
-=======
 import ui
 import time
+import util
 floor = 2
->>>>>>> development
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
@@ -383,15 +379,6 @@ def prepare_floors():
     place_boss(floor_3)
     return floor_1, floor_2, floor_3
 
-<<<<<<< HEAD
-
-def monsters_movement(floors):
-    """
-    parameters: floors
-    potwory poruszaja sie po mapie nawet ktorej nie widac
-    return: floors
-    """
-=======
 """
 parameters: floors
 potwory poruszaja sie po mapie nawet ktorej nie widac
@@ -410,7 +397,6 @@ def monsters_movement(floors):
     Returns:
     list: Game board
     '''
->>>>>>> development
     monsters_xy_list = check_monster_position(floors)
     directions = ["w", "s", "a", "d"]
     for i in monsters_xy_list:
@@ -443,8 +429,6 @@ def monsters_movement(floors):
     return floors
 
 
-<<<<<<< HEAD
-=======
 def boss_movement(floors, board):
     '''
     Randomly choosing coordinates for making random boss movement, overwrite floor_3
@@ -596,7 +580,6 @@ parameters: floors
 zbiera liste koordynatow potworow
 return: lista koordynatow potworow
 """
->>>>>>> development
 def check_monster_position(floors):
     """
     parameters: floors
@@ -637,22 +620,22 @@ def monster_attack(monster):
     if monsters_list[monster]["name"] == "rat":
         x = monsters_list[monster]["name"]
         attack = random.randrange(1, 4)
-        main.health -= attack
+        util.health -= attack
         print(f"You got bitten by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "skeleton":
         x = monsters_list[monster]["name"]
         attack = random.randrange(5, 8)
-        main.health -= attack
+        util.health -= attack
         print(f"You got scratched by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "archer":
         x = monsters_list[monster]["name"]
         attack = random.randrange(9, 12)
-        main.health -= attack
+        util.health -= attack
         print(f"You got shot by a {x}. Your hp is lowered by {attack} points.")
     if monsters_list[monster]["name"] == "warrior":
         x = monsters_list[monster]["name"]
         attack = random.randrange(13, 15)
-        main.health -= attack
+        util.health -= attack
         print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
 
 
