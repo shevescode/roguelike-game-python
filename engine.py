@@ -548,23 +548,23 @@ def contact_with_boss(key,board, player_x, player_y):
         return False
 
 def fight_with_boss():
-    boss["hp"] -= main.attack
-    main.health -= boss["attack"]
-    if main.health >= boss["attack"]:
+    boss["hp"] -= util.attack
+    util.health -= boss["attack"]
+    if util.health >= boss["attack"]:
         ui.display_message(
             f"You have been attacked by {boss['feature']} {boss['type']}! \nThe {boss['type']} attacked you with {boss['attack']} attack points.")
         time.sleep(2)
         ui.display_message(
-            f"You have left {main.health} health points.")
+            f"You have left {util.health} health points.")
         time.sleep(2)
 
-    elif 0 < main.health <= boss['attack']:
+    elif 0 < util.health <= boss['attack']:
         ui.display_message(
-            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
-        main.health = 0
-    elif main.health == 0:
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
+
+    elif util.health == 0:
         ui.display_message(
-            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {util.health} health points.")
         time.sleep(2)
         ui.display_message(
             f"You were defeated by the {boss['feature']} {boss['type']} :(.")
