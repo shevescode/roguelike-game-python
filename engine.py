@@ -2,6 +2,8 @@ from main import BOARD_HEIGHT, BOARD_WIDTH
 import main
 import random
 import os
+import ui
+import time
 floor = 2
 discovered_floor_0 = None
 discovered_floor_1 = None
@@ -136,19 +138,19 @@ def player_movement(key, board, floors):
         return board
 # ruch gracza
     if key == "w":
-        if not board[player_x - 1][player_y] == "o":
+        if not board[player_x - 1][player_y] == "#":
             board[player_x - 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "s":
-        if not board[player_x + 1][player_y] == "o":
+        if not board[player_x + 1][player_y] == "#":
             board[player_x + 1][player_y] = "@"
             board[player_x][player_y] = "."
     elif key == "a":
-        if not board[player_x][player_y - 1] == "o":
+        if not board[player_x][player_y - 1] == "#":
             board[player_x][player_y - 1] = "@"
             board[player_x][player_y] = "."
     elif key == "d":
-        if not board[player_x][player_y + 1] == "o":
+        if not board[player_x][player_y + 1] == "#":
             board[player_x][player_y + 1] = "@"
             board[player_x][player_y] = "."
 
@@ -291,7 +293,7 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
-boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25}
+boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25, "feature": "invincible"}
 
 
 #LISTS TO RANDOM CHOICE
@@ -517,24 +519,6 @@ def player_in_boss_range(floors, board, direction):
                 if board[x][y + 5] == "@":
                     return False
         return True
-    # # for index, value in enumerate(boss_xy_list):
-    # #     x,y = value
-    # #     if direction == "w" and index >= 20:
-    # #         if board[x - 5][y] == "@":
-    # #             return False
-    # #         return True
-    #     if direction == "s" and index <= 5:
-    #         if board[x + 5][y] == "@":
-    #             return False
-    #         return True
-    #     if direction == "a" and (index == 4 or index == 9 or index == 14 or index == 19 or index == 24):
-    #         if board[x][y - 5] == "@":
-    #             return False
-    #         return True
-    #     if direction == "d" and (index == 0 or index == 5 or index == 10 or index == 15 or index == 20):
-    #         if board[x][y + 5] == "@":
-    #             return False
-    #         return True
 
 def contact_with_boss(key,board, player_x, player_y):
     if key == "w":
@@ -562,10 +546,31 @@ def contact_with_boss(key,board, player_x, player_y):
 def fight_with_boss():
     boss["hp"] -= main.attack
     main.health -= boss["attack"]
-    if boss["hp"] <= 0:
-        print("You won!")
-        os.system("pause")
+    if main.health >= boss["attack"]:
+        ui.display_message(
+            f"You have been attacked by {boss['feature']} {boss['type']}! \nThe {boss['type']} attacked you with {boss['attack']} attack points.")
+        time.sleep(2)
+        ui.display_message(
+            f"You have left {main.health} health points.")
+        time.sleep(2)
+
+    elif 0 < main.health <= boss['attack']:
+        ui.display_message(
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
+        main.health = 0
+    elif main.health == 0:
+        ui.display_message(
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
+        time.sleep(2)
+        ui.display_message(
+            f"You were defeated by the {boss['feature']} {boss['type']} :(.")
+        time.sleep(1)
         quit()
+        # dodać tutaj wywołanie funkcji która będzie nam pytać czy grasz dalej czy nie
+        quit()
+        # elif boss["hp"] <= 0:
+        #     ui.display_message(f"The {boss['feature']} {boss['type']} has been defeated! You have won the game!")
+        #     time.sleep(1)
 """
 parameters: floors
 zbiera liste koordynatow potworow
