@@ -5,11 +5,11 @@ import os
 import ui
 import time
 import util
-floor = 0
+floor = 2
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
-icanseeyou = 0
+icanseeyou = 1
 # board is based on rows / height = rows / width = elements in row
 
 
