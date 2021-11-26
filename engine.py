@@ -2,11 +2,13 @@ from main import BOARD_HEIGHT, BOARD_WIDTH
 import main
 import random
 import os
-floor = 0
+import ui
+import time
+floor = 2
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
-icanseeyou = 0
+icanseeyou = 1
 # board is based on rows / height = rows / width = elements in row
 
 def create_board(width, height):
@@ -52,17 +54,18 @@ def put_player_on_board(board, player, floors):
 
     # current_floor = read_board(change_floor())
     remove_monsters_from_eyeshot(board)
+    remove_boss_from_eyeshot(board)
 
     if icanseeyou == 0:
-        count_x = -2
-        count_y = -2
-        for i in range(5):
-            for j in range(5):
+        count_x = -3
+        count_y = -3
+        for i in range(7):
+            for j in range(7):
                 if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
                     board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
                     count_y += 1
             count_x += 1
-            count_y = -2
+            count_y = -3
     if icanseeyou == 1:
         count_x = 0
         count_y = 0
@@ -131,7 +134,8 @@ def player_movement(key, board, floors):
 
 # znaleznienie itemu przez gracza
     player_stand_on_item(player_x, player_y, key, board, floors)
-    # fight_with_boss(key, board, player_x, player_y)
+    if contact_with_boss(key, board, player_x, player_y) == True:
+        return board
 # ruch gracza
     if key == "w":
         if not board[player_x - 1][player_y] == "#":
@@ -156,6 +160,14 @@ def remove_monsters_from_eyeshot(board):
     for x, i in enumerate(board):
         for y, j in enumerate(i):
             if j == "M":
+                board[x][y] = "."
+    return board
+
+
+def remove_boss_from_eyeshot(board):
+    for x, i in enumerate(board):
+        for y, j in enumerate(i):
+            if j == "B":
                 board[x][y] = "."
     return board
 
@@ -281,8 +293,10 @@ eq_items = {
     6: {"type": "inv", "name": "artifact", "function": "deffence", "att": 20},
 }
 
-# boss = {"type": "boss", "hp": 2000, "attack": 50, "deffence": 50}
-# 
+
+boss = {"type": "boss", "hp": 200, "attack": 30, "deffence": 25, "feature": "invincible"}
+
+
 
 #LISTS TO RANDOM CHOICE
 item_list = [eq_items]
@@ -413,7 +427,7 @@ def monsters_movement(floors):
     return floors
 
 
-def boss_movement(floors):
+def boss_movement(floors, board):
     '''
     Randomly choosing coordinates for making random boss movement, overwrite floor_3
 
@@ -426,67 +440,145 @@ def boss_movement(floors):
     boss_xy_list = get_boss_coordinates(floors[2])
     directions = ["w", "s", "a", "d"]
     random_direction = random.choice(directions)
-    for i in boss_xy_list:
-        if random_direction == "w":
+    if random_direction == "w":
+        if player_in_boss_range(floors, board, random_direction) == True:
             for index, value in enumerate(boss_xy_list):
                 if index >= 20:
                     x, y = value
                     if not (x - 5) in range(1, 35) or (floors[2])[x - 5][y] == "#" or (floors[2])[x - 5][y] == " " or (floors[2])[x - 5][y] == "$":
                         continue
-                    else:
-                        (floors[2])[x][y] = "."
-                        (floors[2])[x - 5][y] = "B"
-
-        elif random_direction == "s":
+                    (floors[2])[x][y] = "."
+                    (floors[2])[x - 5][y] = "B"
+    elif random_direction == "s":
+        if player_in_boss_range(floors, board, random_direction) == True:
             for index, value in enumerate(boss_xy_list):
                 if index <= 4:
                     x, y = value
                     if not (x + 5) in range(1, 35) or (floors[2])[x + 5][y] == "#" or (floors[2])[x + 5][y] == " " or (floors[2])[x + 5][y] == "$":
                         continue
-                    else:
-                        (floors[2])[x][y] = "."
-                        (floors[2])[x + 5][y] = "B"
-        elif random_direction == "a":
+                    (floors[2])[x][y] = "."
+                    (floors[2])[x + 5][y] = "B"
+    elif random_direction == "a":
+        if player_in_boss_range(floors, board, random_direction) == True:
             for index, value in enumerate(boss_xy_list):
                 if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
                     x, y = value
                     if not (y - 5) in range(1, 64) or (floors[2])[x][y - 5] == "#" or (floors[2])[x][y - 5] == " " or (floors[2])[x][y - 5] == "$":
                         continue
-                    else:
-                        (floors[2])[x][y] = "."
-                        (floors[2])[x][y - 5] = "B"
-        elif random_direction == "d":
+                    (floors[2])[x][y] = "."
+                    (floors[2])[x][y - 5] = "B"
+    elif random_direction == "d":
+        if player_in_boss_range(floors, board, random_direction) == True:
             for index, value in enumerate(boss_xy_list):
                 if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
                     x, y = value
                     if not (y - 5) in range(1, 64) or (floors[2])[x][y + 5] == "#" or (floors[2])[x][y + 5] == " " or (floors[2])[x][y + 5] == "$":
                         continue
-                    else:
-                        (floors[2])[x][y] = "."
-                        (floors[2])[x][y + 5] = "B"
+                    (floors[2])[x][y] = "."
+                    (floors[2])[x][y + 5] = "B"
     return floors
 
-# def fight_with_boss(key,board, player_x, player_y):
-#     if key == "w":
-#         if board[player_x - 1][player_y] == "B":
-#             print("Hello")
-#     if key == "s":
-#         if board[player_x + 1][player_y] == "B":
-#             print("Hello")
-#             pass
-#     if key == "a":
-#         if (floors[floor])[x][y - 1] == "B":
-#             pass
-#     if key == "d":
-#         if (floors[floor])[x][y + 1] == "B":
-#             pass
+# def player_in_range(floors, board):
+#     boss_xy_list = get_boss_coordinates(floors[2])
+#     for i in boss_xy_list:
+#         x, y = i
+#         if board[x - 1][y] == "@":
+#             return False
+#         if board[x + 1][y] == "@":
+#             return False
+#         if board[x][y - 1] == "@":
+#             return False
+#         if board[x][y + 1] == "@":
+#             return False
+
+def player_in_boss_range(floors, board, direction):
+    boss_xy_list = get_boss_coordinates(floors[2])
+    if direction == "w":
+        for index, value in enumerate(boss_xy_list):
+            if index >= 20:
+                x, y = value
+                if board[x - 5][y] == "@":
+                    return False
+        return True
+    elif direction == "s":
+        for index, value in enumerate(boss_xy_list):
+            if index <= 4:
+                x, y = value
+                if board[x + 5][y] == "@":
+                    return False
+        return True
+    elif direction == "a":
+        for index, value in enumerate(boss_xy_list):
+            if index == 4 or index == 9 or index == 14 or index == 19 or index == 24:
+                x, y = value
+                if board[x][y - 5] == "@":
+                    return False
+        return True
+    elif direction == "d":
+        for index, value in enumerate(boss_xy_list):
+            if index == 0 or index == 5 or index == 10 or index == 15 or index == 20:
+                x, y = value
+                if board[x][y + 5] == "@":
+                    return False
+        return True
+
+def contact_with_boss(key,board, player_x, player_y):
+    if key == "w":
+        if board[player_x - 1][player_y] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "s":
+        if board[player_x + 1][player_y] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "a":
+        if board[player_x][player_y - 1] == "B":
+            fight_with_boss()
+            return True
+        return False
+    elif key == "d":
+        if board[player_x][player_y + 1] == "B":
+            fight_with_boss()
+            return True
+
+        return False
+
+def fight_with_boss():
+    boss["hp"] -= main.attack
+    main.health -= boss["attack"]
+    if main.health >= boss["attack"]:
+        ui.display_message(
+            f"You have been attacked by {boss['feature']} {boss['type']}! \nThe {boss['type']} attacked you with {boss['attack']} attack points.")
+        time.sleep(2)
+        ui.display_message(
+            f"You have left {main.health} health points.")
+        time.sleep(2)
+
+    elif 0 < main.health <= boss['attack']:
+        ui.display_message(
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
+        main.health = 0
+    elif main.health == 0:
+        ui.display_message(
+            f"The {boss['type']} attacked you with {boss['attack']} attack points, now you have {main.health} health points.")
+        time.sleep(2)
+        ui.display_message(
+            f"You were defeated by the {boss['feature']} {boss['type']} :(.")
+        time.sleep(1)
+        quit()
+        # dodać tutaj wywołanie funkcji która będzie nam pytać czy grasz dalej czy nie
+        quit()
+        # elif boss["hp"] <= 0:
+        #     ui.display_message(f"The {boss['feature']} {boss['type']} has been defeated! You have won the game!")
+        #     time.sleep(1)
 """
 parameters: floors
 zbiera liste koordynatow potworow
 return: lista koordynatow potworow
 """
 def check_monster_position(floors):
-    
     monsters_xy_list = []
     for x, i in enumerate(floors[floor]):
         for y, j in enumerate(i):
@@ -495,6 +587,70 @@ def check_monster_position(floors):
                 monsters_xy_list.append(temp)
     return monsters_xy_list
 
+#Monsters dictionaries
+monsters_list = {
+    1: {"type": "monster", "name": "rat", "activity": "fight", "hp": 20},
+    2: {"type": "monster", "name": "skeleton", "activity": "fight", "hp": 25},
+    3: {"type": "monster", "name": "archer", "activity": "fight", "hp": 30},
+    4: {"type": "monster", "name": "warrior", "activity": "fight", "hp": 35},
+}
+
+def monster_choose():
+    """ chooses random monster from the provided dictionary """
+    monster = random.choice(list(monsters_list))
+    return monster
+
+def monster_attack(monster):
+    monster = monster_choose()
+    """ implement hit and miss for each monster depending on their attack strength
+        returns hit and attack points
+     """
+    # att_strength = random.randrange(0, 24)
+    attack = random.randrange(0, 5)
+    if attack == 0:
+        hit = "missed"
+        print(f"Your opponent {hit}. Your hp level didn't change")
+    if monsters_list[monster]["name"] == "rat":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(1, 4)
+        main.health -= attack
+        print(f"You got bitten by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "skeleton":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(5, 8)
+        main.health -= attack
+        print(f"You got scratched by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "archer":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(9, 12)
+        main.health -= attack
+        print(f"You got shot by a {x}. Your hp is lowered by {attack} points.")
+    if monsters_list[monster]["name"] == "warrior":
+        x = monsters_list[monster]["name"]
+        attack = random.randrange(13, 15)
+        main.health -= attack
+        print(f"You got hit by a {x}. Your hp is lowered by {attack} points.")
+
+
+monster_attack(monster=True)
+
+def player_attack_monster(player_x, player_y, key, board, floors):
+    if key == "w":
+        if board[player_x - 1][player_y] == "M":
+            (floors[floor])[player_x - 1][player_y] = "D"
+            print("dupa")
+    elif key == "s":
+        if board[player_x + 1][player_y] == "M":
+            (floors[floor])[player_x + 1][player_y] = "D"
+            print("dupa")
+    elif key == "a":
+        if board[player_x][player_y - 1] == "M":
+            (floors[floor])[player_x][player_y - 1] = "D"
+            print("dupa")
+    elif key == "d":
+        if board[player_x][player_y + 1] == "M":
+            (floors[floor])[player_x][player_y + 1] = "D"
+            print("dupa")
 
 """
 parameters: key
