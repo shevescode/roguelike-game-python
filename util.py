@@ -1,6 +1,10 @@
 import sys
 import os
 
+attack = 10
+armour = 10
+health = 100
+total_health = 150
 
 def key_pressed():
     try:
@@ -31,4 +35,3 @@ def clear_screen():
         os.system('cls')
     else:
         os.system('clear')
-    
