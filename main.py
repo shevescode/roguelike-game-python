@@ -4,7 +4,7 @@ import engine
 import ui
 
 PLAYER_ICON = '@'
-PLAYER_START_X = 23
+PLAYER_START_X = 24
 PLAYER_START_Y = 5
 inventory = ["YOUR INVENTORY: "]
 BOARD_WIDTH = 64
@@ -70,6 +70,7 @@ def main():
         else:
             board = engine.player_movement(key, board, floors)
             floors = engine.monsters_movement(floors)
+            floors = engine.boss_movement(floors, board)
             show_inventory = 0
         util.clear_screen()
 

@@ -25,24 +25,8 @@ def display_board(board, inv):
             print()
 
 
-# def display_inventory(key):
-#     '''
-#     Displays inventory on the screen
-
-#     Returns:
-#     Nothing
-#     '''
-#     if key == "i":
-#         print("\nYour inventory: ")
-#         if len(main.inventory) == 0:
-#             print("Your inventory is empty.")
-#         else:
-#             for equipment in main.inventory:
-#                 print(equipment)
-
-#     print()
-#     os.system("pause")
-
+def display_message(message):
+    print(message)
 
 def display_stats(health, total_health, attack, armour):
     """
