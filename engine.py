@@ -5,11 +5,11 @@ import os
 import ui
 import time
 import util
-floor = 2
+floor = 0
 discovered_floor_0 = None
 discovered_floor_1 = None
 discovered_floor_2 = None
-icanseeyou = 1
+icanseeyou = 0
 # board is based on rows / height = rows / width = elements in row
 
 
@@ -254,7 +254,7 @@ def drew_item_informations(number, adjective, select_dict, item, ability):
                 f"You found {eq_items[item]['name']}. It's increasing {ability} by {number}. It was added to your inventory.")
             if ability == "defence points":
                 util.armour += number
-                main.inventory.append(f"The fucking horn of defense + {number}")
+                main.inventory.append(f"The fucking horn of defence + {number}")
             else:
                 util.attack += number
                 main.inventory.append(
@@ -547,12 +547,13 @@ def contact_with_boss(key,board, player_x, player_y):
 
 
 def play_again():
+    global floor
     '''
     parameter: -
     Asking player for playing again or quit.
     returns: -
     '''
-    ui.display_message("""Would you like to play again?"
+    ui.display_message("""Would you like to play again?
 
     1. Yes
 
@@ -563,6 +564,7 @@ def play_again():
         if again == "":
             continue
         if again == "1":
+            floor = 0
             main.main()
         if again == "2":
             ui.display_message(f"\nGoodbye! See you next time!\n")
@@ -646,56 +648,69 @@ def monster_attack(monster):
         print(f"Your opponent {hit}. Your hp level didn't change")
     if monsters_list[monster]["name"] == "rat":
         rat_hp = monsters_list[monster]["hp"]
-        while rat_hp > 0:
+        while  util.health > 0:
             util.health -= attack
             attack = random.randrange(1, 4)
+            print(f"HEALTH: {util.health}/{util.total_health}")
             print(f"You got bitten by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {rat_hp}")
             rat_hp -= util.attack
             time.sleep(3)
-        if rat_hp <= 0:
-            print(f"You won the fight!")
-        if util.health <= 0:
-            print(f"You died. You are are noob.")
-        time.sleep(3)
+            if util.health <= 0:
+                print(f"\nYou died. You are noob.\n")
+                play_again()
+            if rat_hp <= 0:
+                print(f"\nYou won the fight!\n")
+                time.sleep(3)
+                break
     if monsters_list[monster]["name"] == "skeleton":
         skeleton_hp = monsters_list[monster]["hp"]
-        while skeleton_hp > 0:
+        while util.health > 0:
             util.health -= attack
             attack = random.randrange(5, 8)
+            print(f"HEALTH: {util.health}/{util.total_health}")
             print(f"You got scratched by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {skeleton_hp}")
             skeleton_hp -= util.attack
             time.sleep(3)
-        if skeleton_hp <= 0:
-            print(f"You won the fight!")
-        if util.health <= 0:
-            print(f"You died. You are are noob.")
-        time.sleep(3)
+            if util.health <= 0:
+                print(f"\nYou died. You are noob.\n")
+                play_again()
+            if skeleton_hp <= 0:
+                print(f"\nYou won the fight!\n")
+                time.sleep(3)
+                break
     if monsters_list[monster]["name"] == "archer":
         archer_hp = monsters_list[monster]["hp"]
-        while archer_hp > 0:
+        while util.health > 0:
             util.health -= attack
             attack = random.randrange(9, 12)
+            print(f"HEALTH: {util.health}/{util.total_health}")
             print(f"You got shot by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {archer_hp}")
             archer_hp -= util.attack
             time.sleep(3)
-        if archer_hp <= 0:
-            print(f"You won the fight!")
-        if util.health <= 0:
-            print(f"You died. You are are noob.")
-        time.sleep(3)
+            if util.health <= 0:
+                print(f"\nYou died. You are noob.\n")
+                play_again()
+            if archer_hp <= 0:
+                print(f"\nYou won the fight!\n")
+                time.sleep(3)
+                break
+
     if monsters_list[monster]["name"] == "warrior":
         warrior_hp = monsters_list[monster]["hp"]
-        while warrior_hp > 0:
+        while util.health > 0:
             util.health -= attack
             attack = random.randrange(13, 15)
+            print(f"HEALTH: {util.health}/{util.total_health}")
             print(f"You got hit by a {monsters_list[monster]['name']}. Your hp is lowered by {attack} points.\n Monsters hp got lowered by {util.attack}. Monster hp is {warrior_hp}")
             warrior_hp -= util.attack
             time.sleep(3)
-        if warrior_hp <= 0:
-            print(f"You won the fight!")
-        if util.health <= 0:
-            print(f"You died. You are are noob.")
-        time.sleep(3)
+            if util.health <= 0:
+                print(f"\nYou died. You are noob.\n")
+                play_again()
+            if warrior_hp <= 0:
+                print(f"\nYou won the fight!\n")
+                time.sleep(3)
+                break
 
 
 def player_attack_monster(player_x, player_y, key, board, floors):
