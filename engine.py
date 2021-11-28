@@ -392,7 +392,7 @@ return: floors
 """
 
 
-def monsters_movement(floors):
+def monsters_movement(floors, board):
     '''
     Creates a new game board based on input parameters.
 
@@ -409,25 +409,29 @@ def monsters_movement(floors):
         random_direction = random.choice(directions)
         x, y = i
         if random_direction == "w":
-            if (x - 1) not in range(1, 35) or (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or (floors[floor])[x - 1][y] == " " or (floors[floor])[x - 1][y] == "B" or (floors[floor])[x - 1][y] == "$":
+            if ((x - 1) not in range(1, 35) or (floors[floor])[x - 1][y] == "#" or (floors[floor])[x - 1][y] == "X" or
+            (floors[floor])[x - 1][y] == " " or (floors[floor])[x - 1][y] == "B" or (floors[floor])[x - 1][y] == "$" or board[x - 1][y] == "@"):
                 continue
             else:
                 (floors[floor])[x - 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "s":
-            if (x + 1) not in range(1, 35) or (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or (floors[floor])[x + 1][y] == " " or (floors[floor])[x + 1][y] == "B" or (floors[floor])[x + 1][y] == "$":
+            if ((x + 1) not in range(1, 35) or (floors[floor])[x + 1][y] == "#" or (floors[floor])[x + 1][y] == "X" or
+            (floors[floor])[x + 1][y] == " " or (floors[floor])[x + 1][y] == "B" or (floors[floor])[x + 1][y] == "$" or board[x + 1][y] == "@"):
                 continue
             else:
                 (floors[floor])[x + 1][y] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "a":
-            if (y - 1) not in range(1, 63) or (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or (floors[floor])[x][y - 1] == " " or (floors[floor])[x][y - 1] == "B" or (floors[floor])[x][y - 1] == "$":
+            if ((y - 1) not in range(1, 63) or (floors[floor])[x][y - 1] == "#" or (floors[floor])[x][y - 1] == "X" or
+            (floors[floor])[x][y - 1] == " " or (floors[floor])[x][y - 1] == "B" or (floors[floor])[x][y - 1] == "$" or board[x][y - 1] == "@"):
                 continue
             else:
                 (floors[floor])[x][y - 1] = "M"
                 (floors[floor])[x][y] = "."
         elif random_direction == "d":
-            if (y + 1) not in range(1, 63) or (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or (floors[floor])[x][y + 1] == " " or (floors[floor])[x][y + 1] == "B" or (floors[floor])[x][y + 1] == "$":
+            if ((y + 1) not in range(1, 63) or (floors[floor])[x][y + 1] == "#" or (floors[floor])[x][y + 1] == "X" or
+            (floors[floor])[x][y + 1] == " " or (floors[floor])[x][y + 1] == "B" or (floors[floor])[x][y + 1] == "$" or board[x][y + 1] == "@"):
                 continue
             else:
                 (floors[floor])[x][y + 1] = "M"
