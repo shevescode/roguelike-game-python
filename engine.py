@@ -63,7 +63,7 @@ def put_player_on_board(board, player, floors):
         count_y = -3
         for i in range(7):
             for j in range(7):
-                if x + count_x in range(-1, BOARD_HEIGHT) and y + count_y in range(-1, BOARD_WIDTH):
+                if x + count_x in range(-2, BOARD_HEIGHT) and y + count_y in range(-2, BOARD_WIDTH):
                     board[x + count_x][y + count_y] = floors[floor][x + count_x][y + count_y]
                     count_y += 1
             count_x += 1
